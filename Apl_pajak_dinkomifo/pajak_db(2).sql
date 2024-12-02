@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2024 at 02:49 AM
+-- Generation Time: Dec 02, 2024 at 06:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `elektronik` (
   `id` int(11) NOT NULL,
   `jenis_barang` varchar(50) DEFAULT NULL,
-  `nama_peminjam` varchar(100) DEFAULT NULL,
+  `nama_pemakai` varchar(100) DEFAULT NULL,
   `no_telepon` varchar(15) DEFAULT NULL,
   `merk` varchar(100) DEFAULT NULL,
   `serial_number` varchar(100) DEFAULT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `elektronik` (
 -- Dumping data for table `elektronik`
 --
 
-INSERT INTO `elektronik` (`id`, `jenis_barang`, `nama_peminjam`, `no_telepon`, `merk`, `serial_number`, `kondisi`, `tanggal_pemeliharaan`, `keterangan`, `bukti_pemeliharaan`, `foto_barang`, `nama_barang`, `keterangan_kerusakan`, `biaya_pemeliharaan`, `harga_pembelian`) VALUES
+INSERT INTO `elektronik` (`id`, `jenis_barang`, `nama_pemakai`, `no_telepon`, `merk`, `serial_number`, `kondisi`, `tanggal_pemeliharaan`, `keterangan`, `bukti_pemeliharaan`, `foto_barang`, `nama_barang`, `keterangan_kerusakan`, `biaya_pemeliharaan`, `harga_pembelian`) VALUES
 (11, 'kamera', 'robana', '0988777', 'aaa', '09imjhjuu', 'normal', '2024-12-01', NULL, NULL, NULL, 'opkoo', 'lknlkljl', 20000.00, 9999000.00),
 (12, 'psaopoas', 'oasoj', '88898899', 'iii', '7s7a8sd', 'normal', NULL, NULL, NULL, NULL, 'iaoasi', NULL, NULL, 200000.00);
 
@@ -152,7 +152,8 @@ CREATE TABLE `history_perbaikan_kendaraan` (
 
 INSERT INTO `history_perbaikan_kendaraan` (`id_kendaraan`, `kondisi`, `tanggal`, `biaya`, `keterangan`, `bukti_pembayaran`, `pengguna`, `created_at`) VALUES
 (13, ';mamkak', '2024-11-30', 100.00, ';;kkaaa', NULL, 'deka', '2024-11-30 21:58:09'),
-(13, 'lmlkmlmlkmkl', '2024-11-30', 100.00, ';alalla', NULL, 'deka', '2024-11-30 22:02:13');
+(13, 'lmlkmlmlkmkl', '2024-11-30', 100.00, ';alalla', NULL, 'deka', '2024-11-30 22:02:13'),
+(13, 'kkkkjkjhhk', '2024-12-02', 100.00, '', NULL, 'dekaaaa', '2024-12-02 03:33:30');
 
 -- --------------------------------------------------------
 
@@ -178,22 +179,28 @@ CREATE TABLE `kendaraan` (
   `kondisi` text DEFAULT NULL,
   `bukti` varchar(255) DEFAULT NULL,
   `status_pemeliharaan` text DEFAULT NULL,
-  `keterangan` text DEFAULT NULL
+  `keterangan` text DEFAULT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
+  `bast` varchar(255) DEFAULT NULL,
+  `nip` varchar(255) DEFAULT NULL,
+  `tahun_pembelian` date DEFAULT NULL,
+  `foto_stnk` varchar(255) DEFAULT NULL,
+  `foto_bpkb` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kendaraan`
 --
 
-INSERT INTO `kendaraan` (`id`, `pemakai`, `no_telepon`, `no_plat`, `merk`, `tipe`, `tahun_pembuatan`, `harga_pembelian`, `tenggat_stnk`, `tenggat_nopol`, `foto_kendaraan`, `bukti_pembayaran`, `tanggal_pemeliharaan`, `biaya_pemeliharaan`, `kondisi`, `bukti`, `status_pemeliharaan`, `keterangan`) VALUES
-(13, 'dekaaaa', '98098', '09890', '980999999', 'Motor', 9020, 9898908.00, '2025-12-03', '2029-12-26', NULL, NULL, '2024-12-02', 100.00, 'kkkkjkjhhk', NULL, 'Perbaikan', NULL),
-(14, 'santi', '988090', '98980', 'MIU', 'Motor', 9009, 890809.00, '1987-12-01', '2029-11-26', NULL, NULL, '2024-11-30', 200000.00, 'lkm&#039;mlk', NULL, 'Normal', 'sda.d.asa'),
-(19, 'YANTO', '987897', '798798', '987987', 'Motor', 987987, 97987.00, '2024-01-01', '2024-01-01', 'uploads/1730689944_foto_Screenshot (36).png', 'uploads/1730689944_bukti_Screenshot (35).png', '2024-11-28', 1000000.00, 'Mobil Mengalami Kebakaran', NULL, 'Normal', 'aaaaa'),
-(20, 'hjbj', 'hjbwjhb', 'jhbsjhb', 'jhsbjhwb', 'Motor', 9878, 8798.00, '0000-00-00', '0888-08-07', 'uploads/1730689997_foto_Screenshot (36).png', 'uploads/1730689997_bukti_Screenshot (35).png', '2024-11-30', 10000.00, 'mususus', NULL, 'Normal', 'hahasss'),
-(21, 'jjjjj', '0987777', 'j67788jj', 'aaa', 'Motor', 2018, 876666.00, '0000-00-00', '2024-11-22', 'uploads/1730768645_foto_Screenshot (35).png', NULL, '2024-11-29', 222999.00, 'assaasjosa', NULL, 'Normal', 'snjasja'),
-(23, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '2010-12-11', '2024-12-25', NULL, NULL, '2024-12-01', NULL, 'sndlkasnkdas', NULL, 'Perbaikan', NULL),
-(24, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '0000-00-00', '2024-12-25', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 'kiis', '0802828', '778ss', 'KOBRA', 'Motor', 2011, 200002.00, '0000-00-00', '2016-12-06', NULL, NULL, NULL, NULL, NULL, NULL, 'Normal', NULL);
+INSERT INTO `kendaraan` (`id`, `pemakai`, `no_telepon`, `no_plat`, `merk`, `tipe`, `tahun_pembuatan`, `harga_pembelian`, `tenggat_stnk`, `tenggat_nopol`, `foto_kendaraan`, `bukti_pembayaran`, `tanggal_pemeliharaan`, `biaya_pemeliharaan`, `kondisi`, `bukti`, `status_pemeliharaan`, `keterangan`, `alamat`, `bast`, `nip`, `tahun_pembelian`, `foto_stnk`, `foto_bpkb`) VALUES
+(13, 'dekaaaa', '98098', '09890', '980999999', 'Motor', 9020, 9898908.00, '2025-12-03', '2029-12-26', NULL, NULL, '2024-12-02', 100.00, 'kkkkjkjhhk', NULL, 'Normal', '', NULL, NULL, NULL, NULL, NULL, NULL),
+(14, 'santi', '988090', '98980', 'MIU', 'Motor', 9009, 890809.00, '1987-12-01', '2029-11-26', NULL, NULL, '2024-12-02', 200000.00, 'meledak', NULL, 'Perbaikan', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'YANTO', '987897', '798798', '987987', 'Motor', 987987, 97987.00, '2024-01-01', '2024-01-01', 'uploads/1730689944_foto_Screenshot (36).png', 'uploads/1730689944_bukti_Screenshot (35).png', '2024-11-28', 1000000.00, 'Mobil Mengalami Kebakaran', NULL, 'Normal', 'aaaaa', NULL, NULL, NULL, NULL, NULL, NULL),
+(20, 'hjbj', 'hjbwjhb', 'jhbsjhb', 'jhsbjhwb', 'Motor', 9878, 8798.00, '0000-00-00', '0888-08-07', 'uploads/1730689997_foto_Screenshot (36).png', 'uploads/1730689997_bukti_Screenshot (35).png', '2024-11-30', 10000.00, 'mususus', NULL, 'Normal', 'hahasss', NULL, NULL, NULL, NULL, NULL, NULL),
+(21, 'jjjjj', '0987777', 'j67788jj', 'aaa', 'Motor', 2018, 876666.00, '0000-00-00', '2024-11-22', 'uploads/1730768645_foto_Screenshot (35).png', NULL, '2024-11-29', 222999.00, 'assaasjosa', NULL, 'Normal', 'snjasja', NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '2010-12-11', '2024-12-25', NULL, NULL, '2024-12-01', NULL, 'sndlkasnkdas', NULL, 'Perbaikan', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(24, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '0000-00-00', '2024-12-25', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(25, 'kiis', '0802828', '778ss', 'KOBRA', 'Motor', 2011, 200002.00, '0000-00-00', '2016-12-06', NULL, NULL, NULL, NULL, NULL, NULL, 'Normal', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
