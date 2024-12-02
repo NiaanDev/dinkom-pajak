@@ -1,0 +1,57 @@
+/* Reset beberapa gaya default */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Warna latar belakang */
+    display: flex; /* Menggunakan flexbox untuk layout */
+}
+
+.navbar {
+    width: 200px; /* Lebar navbar */
+    background-color: #343a40; /* Warna latar belakang navbar */
+    color: white; /* Warna teks navbar */
+    padding: 20px; /* Padding di dalam navbar */
+    height: 100vh; /* Tinggi navbar 100% dari viewport */
+}
+
+.navbar h1 {
+    text-align: center; /* Tengah untuk judul navbar */
+    margin-bottom: 20px; /* Margin bawah untuk spasi */
+}
+
+.navbar ul {
+    list-style-type: none; /* Menghapus tanda titik */
+}
+
+.navbar li {
+    margin: 15px 0; /* Margin antara item */
+}
+
+.navbar a {
+    text-decoration: none; /* Menghapus garis bawah pada tautan */
+    color: white; /* Warna teks tautan */
+    padding: 10px; /* Padding untuk tautan */
+    display: block; /* Menjadikan tautan menjadi blok */
+    transition: background-color 0.3s; /* Efek transisi */
+}
+
+.navbar a:hover {
+    background-color: #007bff; /* Warna latar belakang saat hover */
+}
+
+.container {
+    flex: 1; /* Menggunakan flex untuk mengambil sisa ruang */
+    padding: 20px; /* Padding di dalam kontainer */
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #6c757d; /* Warna teks footer */
+    font-size: 0.9em; /* Ukuran font lebih kecil untuk footer */
+}
