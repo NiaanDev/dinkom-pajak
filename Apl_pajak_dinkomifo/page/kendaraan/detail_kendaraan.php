@@ -62,6 +62,11 @@ if (isset($_GET['id'])) {
         align-items: center; /* Menyusun elemen secara horizontal di tengah */
         justify-content: flex-start; /* Menyusun elemen ke atas */
     }
+    th {
+    max-width: 100px; /* Maksimum panjang kolom */
+    overflow: hidden; /* Menyembunyikan teks yang melebihi batas */
+    text-overflow: ellipsis; /* Menambahkan tanda '...' jika teks terlalu panjang */
+}
 
  
 </style>
@@ -72,7 +77,7 @@ if (isset($_GET['id'])) {
         </div>
 
         <section class="section">
-            <a type="button" href="index.php?halaman=history_pemakai&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pemakai</a>
+            <a type="button" href="index.php?halaman=history_pemakai&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pengguna</a>
             <a type="button" href="index.php?halaman=history_pemeliharaan&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Perbaikan</a>
             <div class="card">
                 
@@ -101,18 +106,30 @@ if (isset($_GET['id'])) {
                         <?php endif; ?>
                     </div>
 
-                    <table class="table table-bordered">
+                    <table class="table table-bordered fs-7">
                         <tr>
-                            <th>Pemakai</th>
+                            <th>Pengguna</th>
                             <td><?= htmlspecialchars($data['pemakai']) ?></td>
                         </tr>
                         <tr>
-                            <th>No Telepon</th>
+                            <th>NIP</th>
+                            <td><?= htmlspecialchars($data['nip']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Alamat Pengguna</th>
+                            <td><?= htmlspecialchars($data['alamat']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>No. Telepon</th>
                             <td><?= htmlspecialchars($data['no_telepon']) ?></td>
                         </tr>
                         <tr>
                             <th>No. Polisi</th>
-                            <td><?= htmlspecialchars($data['no_plat']) ?></td>
+                            <td>
+                                <?= htmlspecialchars($data['no_plat']) ?>
+                                <!-- melihat riwayat perubahan nopol -->
+                                <a href="#" class="text-muted"  data-bs-toggle="modal" data-bs-target="#nopolModal" >(Lihat Perubahan NO. Polisi)</a>
+                            </td>
                         </tr>
                         <tr>
                             <th>Merk</th>
@@ -130,6 +147,24 @@ if (isset($_GET['id'])) {
                             <th>Harga Pembelian</th>
                             <td>Rp <?= number_format($data['harga_pembelian'], 2, ',', '.') ?></td>
                         </tr>
+                        <tr>
+                            <th>Tahun Pembelian</th>
+                            <td><?= htmlspecialchars($data['tahun_pembelian']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Foto BPKB</th>
+                            <td>                              
+                            <?php if (!empty($data['foto_bpkb'])): ?>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
+                                            onclick="showImage('<?= htmlspecialchars($data['foto_bpkb']) ?>')">
+                                        <i class="bi bi-file-earmark-text"></i> Lihat BPKB
+                                    </button>
+                                <?php else: ?>
+                                    <span class="text-muted">Tidak ada Foto BPKB</span>
+                                <?php endif; ?>
+</td>
+                        </tr>
+
 
                         <tr>
                         <th>Status Pajak</th>
@@ -194,11 +229,24 @@ if (isset($_GET['id'])) {
                         </tr>
                         <tr>
                             <th>Masa STNK Sampai</th>
-                            <td><?= htmlspecialchars($data['tenggat_stnk']) ?></td>
+                            <td><?= htmlspecialchars($data['tenggat_stnk']) ?> 
+                            &nbsp;&nbsp;                                 
+                            <?php if (!empty($data['foto_stnk'])): ?>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
+                                            onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>')">
+                                        <i class="bi bi-file-earmark-text"></i> Lihat STNK
+                                    </button>
+                                <?php else: ?>
+                                    <span class="text-muted">Tidak ada Foto STNK</span>
+                                <?php endif; ?>
+                        </td>
                         </tr>
                         <tr>
                             <th>Masa NO.Polisi Sampai</th>
-                            <td><?= htmlspecialchars($data['tenggat_nopol']) ?></td>
+                            <td><?= htmlspecialchars($data['tenggat_nopol']) ?>
+
+                            </td>
+                            
                         </tr>
                         <tr>
                             <th>Bukti Pembayaran</th>
@@ -209,7 +257,20 @@ if (isset($_GET['id'])) {
                                         <i class="bi bi-file-earmark-text"></i> Lihat Bukti
                                     </button>
                                 <?php else: ?>
-                                    <span class="text-muted">Tidak ada bukti pembayaran</span>
+                                    <span class="text-muted">Tidak ada bukti pembayaran pajak</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>BAST</th>
+                            <td>
+                                <?php if (!empty($data['bast'])): ?>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
+                                            onclick="showPDF('<?= htmlspecialchars($data['bast']) ?>')">
+                                        <i class="bi bi-file-earmark-text"></i> Lihat Bukti
+                                    </button>
+                                <?php else: ?>
+                                    <span class="text-muted">Tidak ada file BAST</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -247,6 +308,27 @@ if (isset($_GET['id'])) {
             </div>
         </div>
 
+        <!-- Modal untuk melihat perubahan nopol -->
+        <div class="modal fade" id="nopolModal" tabindex="-1" aria-labelledby="nopolModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="nopolModalLabel">Dummy</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            <div class="mb-3">
+                                <label for="kerusakan" class="form-label">Deskripsi Kerusakan</label>
+                                <textarea name="kerusakan" id="kerusakan" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal untuk menampilkan gambar bukti pembayaran -->
         <div class="modal fade" id="paymentProofModal" tabindex="-1" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -261,6 +343,7 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
+        
 
         <script>
             function showImage(imageSrc) {

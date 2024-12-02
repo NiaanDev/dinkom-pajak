@@ -10,12 +10,15 @@ try {
     if (isset($_POST['submit'])) {
         // Retrieve and sanitize form input
         $pemakai = htmlspecialchars($_POST['pemakai']);
+        $nip = htmlspecialchars($_POST['nip']);
+        $alamat = htmlspecialchars($_POST['alamat']);
         $no_telepon = htmlspecialchars($_POST['no_telepon']);
-        $merk = htmlspecialchars($_POST['merk']);
         $no_plat = htmlspecialchars($_POST['no_plat']);
+        $merk = htmlspecialchars($_POST['merk']);
         $tipe = htmlspecialchars($_POST['tipe']);
         $tahun_pembuatan = htmlspecialchars($_POST['tahun_pembuatan']);
         $harga_pembelian = htmlspecialchars($_POST['harga_pembelian']);
+        $tahun_pembelian = htmlspecialchars($_POST['tahun_pembelian']);
         $tenggat_stnk = htmlspecialchars($_POST['tenggat_stnk']);
         $tenggat_nopol = htmlspecialchars($_POST['tenggat_nopol']);
         $kondisi = "Normal"; 
@@ -41,6 +44,47 @@ try {
                 echo "Only JPG, JPEG, and PNG files are allowed.";
             }
         }
+                // Upload P.BPKB
+                $foto_bpkb = null;
+                if ($_FILES['foto_kendaraan']['name']) {
+                    $target_dir = "uploads/";
+                    $file_name = basename($_FILES["foto_kendaraan"]["name"]);
+                    $target_file = $target_dir . time() . '_foto_' . $file_name;
+                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        
+                    // Validate image file
+                    $check = getimagesize($_FILES["foto_kendaraan"]["tmp_name"]);
+                    if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
+                        if (move_uploaded_file($_FILES["foto_kendaraan"]["tmp_name"], $target_file)) {
+                            $foto_kendaraan = $target_file;
+                        } else {
+                            echo "Error uploading vehicle photo.";
+                        }
+                    } else {
+                        echo "Only JPG, JPEG, and PNG files are allowed.";
+                    }
+                }
+
+                // Upload P.STNK 
+                $foto_stnk = null;
+                if ($_FILES['foto_kendaraan']['name']) {
+                    $target_dir = "uploads/";
+                    $file_name = basename($_FILES["foto_kendaraan"]["name"]);
+                    $target_file = $target_dir . time() . '_foto_' . $file_name;
+                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        
+                    // Validate image file
+                    $check = getimagesize($_FILES["foto_kendaraan"]["tmp_name"]);
+                    if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
+                        if (move_uploaded_file($_FILES["foto_kendaraan"]["tmp_name"], $target_file)) {
+                            $foto_kendaraan = $target_file;
+                        } else {
+                            echo "Error uploading vehicle photo.";
+                        }
+                    } else {
+                        echo "Only JPG, JPEG, and PNG files are allowed.";
+                    }
+                }
 
         // Upload payment proof
         $bukti_pembayaran = null;
@@ -61,9 +105,27 @@ try {
                 echo "Only JPG, JPEG, and PNG files are allowed.";
             }
         }
+        // Upload file BAST
+        $bast = null;
+        if ($_FILES['bukti_pembayaran']['name']) {
+            $file_name = basename($_FILES["bukti_pembayaran"]["name"]);
+            $target_file = $target_dir . time() . '_bukti_' . $file_name;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
+            // Validate image file
+            $check = getimagesize($_FILES["bukti_pembayaran"]["tmp_name"]);
+            if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
+                if (move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $target_file)) {
+                    $bukti_pembayaran = $target_file;
+                } else {
+                    echo "Error uploading payment proof.";
+                }
+            } else {
+                echo "Only JPG, JPEG, and PNG files are allowed.";
+            }
+        }
         // Prepare statement to insert data into the database
-        $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, bukti_pembayaran, status_pemeliharaan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, bukti_pembayaran, status_pemeliharaan, alamat, bast, nip, tahun_pembelian, foto_stnk, foto_bpkb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param(
             'ssssssdsssss',
             $pemakai,
