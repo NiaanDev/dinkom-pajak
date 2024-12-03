@@ -1,6 +1,5 @@
 <?php
 include "./function/koneksi.php";
-include "./function/log.php"; // Pastikan ini ada untuk menggunakan fungsi logHistori
 
 try {
     $message = "";
@@ -19,17 +18,6 @@ try {
             exit; // Tambahkan exit setelah header redirect
         }
 
-        // Menyimpan data lama untuk log
-        $data_lama = implode("\n", [
-            'nama peminjam = ' . htmlspecialchars($data['nama_peminjam']),
-            'no telepon = ' . htmlspecialchars($data['no_telepon']),
-            'merk = ' . htmlspecialchars($data['merk']),
-            'serial number = ' . htmlspecialchars($data['serial_number']),
-            'kondisi = ' . htmlspecialchars($data['kondisi']),
-            'tanggal peminjaman = ' . htmlspecialchars($data['tanggal_peminjaman']), // Format diubah
-            'tanggal pengembalian = ' . htmlspecialchars($data['tanggal_pengembalian']), // Format diubah
-            'status peminjaman = ' . htmlspecialchars($data['status_peminjaman']), // Format diubah
-        ]);
 
         // Hapus data dari tabel elektronik
         $query = mysqli_query($conn, "DELETE FROM elektronik WHERE id = '$id'");
@@ -37,9 +25,6 @@ try {
         if ($query) {
             $message = "Berhasil menghapus data";
 
-            // Log histori untuk aksi 'DELETE'
-            $pengguna = !isset($_SESSION['nama']) ? 'Guest' : $_SESSION['nama'];
-            logHistori('elektronik', $id, 'Hapus Data', $data_lama, null, $pengguna); // Menggunakan logHistori
 
             echo "
             <script>

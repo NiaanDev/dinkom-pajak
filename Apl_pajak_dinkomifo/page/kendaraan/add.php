@@ -83,6 +83,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($stmt->execute()) {
+        if ($no_plat !== NULL){
+
+                        
+            $nopol_stmt = $conn->prepare("
+                INSERT INTO history_nopol (id_kendaraan, nopol, $pemakai) 
+                VALUES (?, ?, ?)
+            ");   
+            $nopol_stmt->bind_param('iss',$id, $no_plat, $pemakai);
+            $nopol_stmt->execute();
+
+        }
         echo "<script>
             Swal.fire({
                 title: 'Data Berhasil Ditambahkan!',

@@ -42,6 +42,10 @@ try {
     <!-- Top action buttons -->
     <div class="d-flex justify-content-between mb-3">
         <div>
+        <a href="index.php?halaman=history_pemeliharaan_elektronik_general" class="btn btn-primary btn-sm">
+                 Lihat history
+            </a>
+
             <a href="javascript:void(0)" class="btn btn-success btn-sm" id="printButton">
                 <i class="bi bi-file-earmark-pdf"></i> Print PDF
             </a>

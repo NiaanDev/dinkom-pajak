@@ -99,7 +99,8 @@ if (isset($_GET['id'])) {
                                 <th>Kondisi</th>
                                 <th>Keterangan</th>
                                 <th>Pengguna</th>
-                                <th>biaya</th>
+                                <th>Biaya</th>
+                                <th>Bukti</th>
 
                             </tr>
                         </thead>
@@ -118,6 +119,7 @@ if (isset($_GET['id'])) {
                                         <td  style=" border: none;"><?= htmlspecialchars($row['keterangan']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['pengguna']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['biaya']) ?></td>
+                                        <td  style=" border: none;"><?= htmlspecialchars($row['bukti']) ?></td>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else: ?>

@@ -63,18 +63,47 @@ try {
             $foto_kendaraan, $foto_bpkb, $foto_stnk, $bast, $id
         );
 
-        if ($stmt->execute()) {
-            echo "<script>
-                Swal.fire({
-                    title: 'Data Berhasil Diupdate!',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                }).then(() => {
-                    window.location.href = 'index.php?halaman=kendaraan';
-                });
-            </script>";
+        if ($stmt->execute()){
+
+                $pengguna = !isset($_SESSION['nama']) ? 'Guest' : $_SESSION['nama'];
+
+                // If pemakai has changed, log the change in history
+                if ($data['pemakai'] !== $pemakai) {
+                    // Insert record into history_kendaraan table
+                    $history_stmt = $conn->prepare("
+                        INSERT INTO history_pemakai (id_kendaraan, action, pemakai_lama, pemakai_baru, pengguna) 
+                        VALUES (?, 'Update Pemakai', ?, ?, ?)
+                    ");
+                    $history_stmt->bind_param('isss', $id, $data['pemakai'], $pemakai, $pengguna);
+                    $history_stmt->execute();
+                    
+
+                    
+                }
+                if ($data['no_plat'] !== $no_plat){
+
+                        
+                    $nopol_stmt = $conn->prepare("
+                        INSERT INTO history_nopol (id_kendaraan, nopol, pemakai) 
+                        VALUES (?, ?, ?)
+                    ");   
+                    $nopol_stmt->bind_param('iss',$id, $no_plat, $pemakai);
+                    $nopol_stmt->execute();
+
+                }
+        
+                
+                echo "<script>
+                    Swal.fire({
+                        title: 'Data Berhasil Diupdate!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                    }).then(() => {
+                        window.location.href = 'index.php?halaman=kendaraan';
+                    });
+                </script>";
         } else {
             $message = "Gagal mengupdate data!";
             $error = true;
@@ -101,7 +130,7 @@ try {
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="pemakai" class="form-label">Penggunai</label>
+                        <label for="pemakai" class="form-label">Pengguna</label>
                         <input type="text" class="form-control" id="pemakai" name="pemakai" value="<?= $data['pemakai'] ?>" required>
                     </div>
                     <div class="col-md-6">

@@ -10,6 +10,12 @@ if (isset($_GET['id'])) {
     $stmt->execute();
     $data = $stmt->get_result()->fetch_assoc();
 
+    $nopol_stmt = $conn->prepare("SELECT * FROM history_nopol WHERE id_kendaraan = ?");
+    $nopol_stmt->bind_param("i", $id);
+    $nopol_stmt->execute();
+    $nopol_data = $nopol_stmt->get_result()->fetch_assoc();
+
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_kendaraan = $id;
         $tanggal_pemeliharaan = date('Y-m-d'); // Tanggal sekarang
@@ -26,6 +32,7 @@ if (isset($_GET['id'])) {
 
 
         if ($update->execute()) {
+
             echo "<script>
                 Swal.fire({
                     title: 'Success',
@@ -47,7 +54,7 @@ if (isset($_GET['id'])) {
         }
     }
 
-    if ($data) {
+    if ($data && $nopol_data) {
         ?>
 <style>
     /* Menggunakan bullet point untuk nomor urut */
@@ -254,21 +261,18 @@ if (isset($_GET['id'])) {
                             </td>
                         </tr>
                         <th>BAST</th>
-<td>
-    <?php if (!empty($data['bast'])): ?>
-        <a href="<?= htmlspecialchars($data['bast']) ?>" target="_blank" class="btn btn-info btn-sm">
-            <i class="bi bi-file-earmark-text"></i> Lihat Dokumen
-        </a>
-    <?php else: ?>
-        <span class="text-muted">Tidak ada file BAST</span>
-    <?php endif; ?>
-</td>
+                        <td>
+                            <?php if (!empty($data['bast'])): ?>
+                                <a href="<?= htmlspecialchars($data['bast']) ?>" target="_blank" class="btn btn-info btn-sm">
+                                    <i class="bi bi-file-earmark-text"></i> Lihat Dokumen
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted">Tidak ada file BAST</span>
+                            <?php endif; ?>
+                        </td>
 
 
                     </table>
-
-                    
-
                     <div class="d-flex justify-content-end mt-3">
                     <a href="index.php?halaman=ubah_kendaraan&id=<?= $data['id'] ?>" class="btn btn-warning mx-1">Edit</a>
                     <a href="index.php?halaman=kendaraan" class="btn btn-secondary">Kembali</a>
@@ -308,15 +312,31 @@ if (isset($_GET['id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post">
-                            <div class="mb-3">
-                                <label for="kerusakan" class="form-label">Deskripsi Kerusakan</label>
-                                <textarea name="kerusakan" id="kerusakan" class="form-control" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Konfirmasi</button>
-                        </form>
-                    </div>
+                        <!-- Tabel Bootstrap -->
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Tanggal Perubahan</th>
+                                        <th scope="col">Nomor Polisi</th>
+                                        <th scope="col">Pengguna</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <th scope="row">+</th>
+                                            <td><?= htmlspecialchars($nopol_data['tanggal_perubahan']) ?></td>
+                                            <td><?= htmlspecialchars($nopol_data['nopol']) ?></td>
+                                            <td><?= htmlspecialchars($data['pemakai']) ?></td>
+                                        </tr>
+                                      
+                                </tbody>
+                            </table>
+                        </div>
+                      
                 </div>
+
             </div>
         </div>
 
