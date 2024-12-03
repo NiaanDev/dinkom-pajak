@@ -15,22 +15,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tahun_pembelian = $_POST['tahun_pembelian'];
     $tenggat_stnk = $_POST['tenggat_stnk'];
     $tenggat_nopol = $_POST['tenggat_nopol'];
-    $kondisi = "Normal";
+    $kondisi = $_POST['kondisi'];
 
-    // Upload file
-    $foto_kendaraan = null;
-    $foto_bpkb = null;
-    $foto_stnk = null;
-    $bast = null;
-
-    // Fungsi upload file
-    function uploadFile($file, $targetDir)
-    {
+    // Fungsi untuk upload file dengan validasi jenis dan ukuran
+    function uploadFile($file, $targetDir, $allowedTypes = [], $maxSize = 2097152) {
         if (!empty($file['name'])) {
             $fileName = basename($file['name']);
+            $fileSize = $file['size'];
+            $fileTmp = $file['tmp_name'];
+            $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+            if (!in_array($fileType, $allowedTypes)) {
+                return "Error: Jenis file tidak didukung!";
+            }
+
+            if ($fileSize > $maxSize) {
+                return "Error: Ukuran file terlalu besar!";
+            }
+
             $targetFilePath = $targetDir . $fileName;
-            move_uploaded_file($file['tmp_name'], $targetFilePath);
-            return $targetFilePath;
+            if (move_uploaded_file($fileTmp, $targetFilePath)) {
+                return $targetFilePath;
+            } else {
+                return "Error: Gagal mengunggah file!";
+            }
         }
         return null;
     }
@@ -42,10 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $foto_kendaraan = uploadFile($_FILES['foto_kendaraan'], $uploadDir);
     $foto_bpkb = uploadFile($_FILES['foto_bpkb'], $uploadDir);
     $foto_stnk = uploadFile($_FILES['foto_stnk'], $uploadDir);
-    $bast = uploadFile($_FILES['bast'], $uploadDir);
+    $bast = uploadFile($_FILES['bast'], $uploadDir, ['pdf']);
+
+    // Periksa error dari upload file BAST
+    if (strpos($bast, 'Error:') === 0) {
+        echo "<script>alert('$bast');</script>";
+        exit;
+    }
 
     // Insert ke database
-    $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, nip, alamat, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tahun_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, foto_bpkb, foto_stnk, bast, status_pemeliharaan) 
+    $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, nip, alamat, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tahun_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, foto_bpkb, foto_stnk, bast, kondisi) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param(
         "sssssssssssssssss",
@@ -89,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -106,8 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-
-    <!DOCTYPE html>
+<div class="card">
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -127,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="" method="post" enctype="multipart/form-data">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label for="pemakai" class="form-label">Pengguna</label>
+                    <label for="pemakai" class="form-label">Pemakai</label>
                     <input type="text" class="form-control" id="pemakai" name="pemakai" required>
                 </div>
                 <div class="col-md-6">
@@ -150,21 +165,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="merk" class="form-label">Merk</label>
                     <input type="text" class="form-control" id="merk" name="merk" required>
                 </div>
-                <div class="col-md-6">
-                    <label for="tipe" class="form-label">Tipe</label>
-                    <input type="text" class="form-control" id="tipe" name="tipe" required>
-                </div>
+                <div class="col-md-6 mb-3">
+                            <label for="tipe"> Tipe</label>
+                            <select name="tipe" class="form-control" required>
+                                <option value="motor" >Motor</option>
+                                <option value="Mobil" >Mobil</option>
+                            </select>
+                        </div>
                 <div class="col-md-6">
                     <label for="tahun_pembuatan" class="form-label">Tahun Pembuatan</label>
-                    <input type="text" class="form-control" id="tahun_pembuatan" name="tahun_pembuatan" required>
+                    <input type="number" class="form-control" id="tahun_pembuatan" name="tahun_pembuatan" required>
                 </div>
                 <div class="col-md-6">
                     <label for="harga_pembelian" class="form-label">Harga Pembelian</label>
                     <input type="number" class="form-control" id="harga_pembelian" name="harga_pembelian" required>
                 </div>
+                <div class="col-md-6 mb-3">
+                            <label for="kondisi"> Kondisi</label>
+                            <select name="kondisi" class="form-control" required>
+                                <option value="normal" >Normal</option>
+                                <option value="perbaikan" >Perbaikan</option>
+                            </select>
+                        </div>
                 <div class="col-md-6">
                     <label for="tahun_pembelian" class="form-label">Tahun Pembelian</label>
-                    <input type="text" class="form-control" id="tahun_pembelian" name="tahun_pembelian" required>
+                    <input type="number" class="form-control" id="tahun_pembelian" name="tahun_pembelian" required>
                 </div>
                 <div class="col-md-6">
                     <label for="tenggat_stnk" class="form-label">Tenggat STNK</label>
