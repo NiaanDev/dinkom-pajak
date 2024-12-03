@@ -231,14 +231,6 @@ if (isset($_GET['id'])) {
                             <th>Masa STNK Sampai</th>
                             <td><?= htmlspecialchars($data['tenggat_stnk']) ?> 
                             &nbsp;&nbsp;                                 
-                            <?php if (!empty($data['foto_stnk'])): ?>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
-                                            onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>')">
-                                        <i class="bi bi-file-earmark-text"></i> Lihat STNK
-                                    </button>
-                                <?php else: ?>
-                                    <span class="text-muted">Tidak ada Foto STNK</span>
-                                <?php endif; ?>
                         </td>
                         </tr>
                         <tr>
@@ -254,26 +246,25 @@ if (isset($_GET['id'])) {
                                 <?php if (!empty($data['foto_stnk'])): ?>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
                                             onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>')">
-                                        <i class="bi bi-file-earmark-text"></i> Lihat Bukti
+                                        <i class="bi bi-file-earmark-text"></i> Lihat Foto STNK
                                     </button>
                                 <?php else: ?>
                                     <span class="text-muted">Tidak ada bukti pembayaran pajak</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
-                        <tr>
-                            <th>BAST</th>
-                            <td>
-                                <?php if (!empty($data['bast'])): ?>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
-                                            onclick="showPDF('<?= htmlspecialchars($data['bast']) ?>')">
-                                        <i class="bi bi-file-earmark-text"></i> Lihat Bukti
-                                    </button>
-                                <?php else: ?>
-                                    <span class="text-muted">Tidak ada file BAST</span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
+                        <th>BAST</th>
+<td>
+    <?php if (!empty($data['bast'])): ?>
+        <a href="<?= htmlspecialchars($data['bast']) ?>" target="_blank" class="btn btn-info btn-sm">
+            <i class="bi bi-file-earmark-text"></i> Lihat Dokumen
+        </a>
+    <?php else: ?>
+        <span class="text-muted">Tidak ada file BAST</span>
+    <?php endif; ?>
+</td>
+
+
                     </table>
 
                     
@@ -317,49 +308,14 @@ if (isset($_GET['id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered fs-8" id="table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center">id</th>
-                                        <th class="text-center">tanggal Perbaikan</th>
-                                        <th class="text-center">Selesai Perbaikan</th>
-                                        <th class="text-center">Pengguna</th>
-                                        <th class="text-center">NIP</th>
-                                        <th class="text-center">Nama Kendaraan</th>
-                                        <th class="text-center">Plat Nomor</th>
-                                        <th class="text-center">kerusakan</th>
-                                        <th class="text-center">keterangan perbaikan</th>
-                                        <th class="text-center">biaya</th>
-                                        <th class="text-center">bukti</th>
-                                </thead>
-                                <tbody>
-                                    <?php if ($count > 0) : ?>
-                                        <?php $i = 1; ?>
-                                        <?php while ($data = $query->fetch_assoc()) : ?>
-                                            <tr>
-                                                <td class="text-center"> <?= htmlspecialchars($data['id_kendaraan']) ?></td>
-                                                <td><?= htmlspecialchars($data['tanggal']) ?></td>
-                                                <td><?= htmlspecialchars($data['created_at']) ?></td>
-                                                <td><?= htmlspecialchars($data['pengguna']) ?></td>
-                                                <td><?= htmlspecialchars($data['nip']) ?></td>
-                                                <td><?= htmlspecialchars($data['nama_kendaraan']) ?></td>
-                                                <td><?= htmlspecialchars($data['plat']) ?></td>
-                                                <td><?= htmlspecialchars($data['kondisi']) ?></td>
-                                                <td><?= htmlspecialchars($data['keterangan']) ?></td>
-                                                <td><?= htmlspecialchars($data['biaya']) ?></td>
-                                                <td></td>
-                                            </tr>
-                                        <?php endwhile; ?>
-                                    <?php else : ?>
-                                        <tr>
-                                            <td colspan="8" class="text-center">Tidak ada data pemeliharaan.</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                </div>
-                </div>
+                        <form action="" method="post">
+                            <div class="mb-3">
+                                <label for="kerusakan" class="form-label">Deskripsi Kerusakan</label>
+                                <textarea name="kerusakan" id="kerusakan" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -378,12 +334,17 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
-        
+</div>
+
 
         <script>
             function showImage(imageSrc) {
                 const modalImage = document.getElementById('modalImage');
                 modalImage.src = imageSrc;
+            }
+            function showPDF(pdfSrc) {
+                const modalPDF = document.getElementById('modalPDF');
+                modalPDF.src = pdfSrc;
             }
         </script>
 <?php

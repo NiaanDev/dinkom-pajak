@@ -10,12 +10,16 @@ try {
         // Retrieve and sanitize form input
         $jenis_barang = htmlspecialchars($_POST['jenis_barang']);
         $nama_barang = htmlspecialchars($_POST['nama_barang']);
-        $nama_peminjam = htmlspecialchars($_POST['nama_peminjam']);
+        $nama_pengguna = htmlspecialchars($_POST['nama_pengguna']);
         $no_telepon = htmlspecialchars($_POST['no_telepon']);
         $merk = htmlspecialchars($_POST['merk']);
         $serial_number = htmlspecialchars($_POST['serial_number']);
         $harga_pembelian = htmlspecialchars($_POST['harga_pembelian']);
-        $kondisi = 'normal';
+        $kondisi = htmlspecialchars($_POST['kondisi']);
+        $nip = htmlspecialchars($_POST['nip']);
+        $alamat = htmlspecialchars($_POST['alamat']);
+        $tahun_pembelian = htmlspecialchars($_POST['tahun_pembelian']);
+        $bast = NULL;
 
         // Upload proof of loan
 
@@ -41,11 +45,11 @@ try {
         }
 
         // Prepare statement to insert data into the database
-        $stmt = $conn->prepare("INSERT INTO elektronik (jenis_barang, nama_peminjam, no_telepon, merk, serial_number, kondisi, harga_pembelian, nama_barang, foto_barang) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO elektronik (jenis_barang, nama_pemakai, no_telepon, merk, serial_number, kondisi, harga_pembelian, nama_barang, foto_barang, nip, alamat, tahun_pembelian, bast) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param(
-            'sssssssss',
+            'sssssssssssss',
             $jenis_barang,
-            $nama_peminjam,
+            $nama_pengguna,
             $no_telepon,
             $merk,
             $serial_number,
@@ -53,6 +57,11 @@ try {
             $harga_pembelian,
             $nama_barang,
             $foto_barang,
+            $nip,
+            $alamat,
+            $tahun_pembelian,
+            $bast
+
         );
 
         // Execute and check success
@@ -113,20 +122,28 @@ try {
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6 mb-3">
+                            <label for="nama_pengguna">Nama pengguna</label>
+                            <input type="text" class="form-control" name="nama_pengguna" >
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="nip">NIP</label>
+                            <input type="text" class="form-control" name="nip" >
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="alamat">Alamat</label>
+                            <textarea class="form-control" name="alamat" ></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="no_telepon">No Telepon</label>
+                            <input type="text" class="form-control" name="no_telepon"  >
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="jenis_barang">Jenis Barang</label>
                             <input type="text" class="form-control" name="jenis_barang"  required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="nama_peminjam">Nama Peminjam (biarkan kosong jika tidak ada Peminjam)</label>
-                            <input type="text" class="form-control" name="nama_peminjam" >
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="no_telepon">No Telepon</label>
-                            <input type="text" class="form-control" name="no_telepon"  required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="nama_barang">nama_barang</label>
-                            <input type="text" class="form-control" name="nama_barang"  required>
+                            <label for="nama_barang">Nama Barang</label>
+                            <input type="text" class="form-control" name="nama_barang" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="merk">Merk</label>
@@ -144,13 +161,22 @@ try {
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="harga_pembelian">harga Pembelian</label>
+                            <label for="harga_pembelian">Harga Pembelian</label>
                             <input type="number" class="form-control" name="harga_pembelian" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="tahun_pembelian">Tahun Pembelian</label>
+                            <input type="text" class="form-control" name="tahun_pembelian" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="foto_barang">Foto Barang</label>
                             <input type="file" class="form-control" name="foto_barang">
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="bast">BAST</label>
+                            <input type="file" class="form-control" name="bast">
+                        </div>
+
                     </div>
                     <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
                     <a href="index.php?halaman=elektronik" class="btn btn-secondary">Batal</a>

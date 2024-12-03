@@ -63,7 +63,7 @@ try {
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center">No.</th>
-                                <th class="text-center">Nama Peminjam</th>
+                                <th class="text-center">Nama Pengguna</th>
                                 <th class="text-center">Jenis barang</th>
                                 <th class="text-center">Nama Barang</th>
                                 <th class="text-center">Nomor Serial</th>
@@ -79,7 +79,7 @@ try {
                                 <?php while ($data = $query->fetch_assoc()): ?>
                                     <tr>
                                         <td><?= $i++ ?></td>
-                                        <td><?= htmlspecialchars($data['nama_peminjam']) ?></td>
+                                        <td><?= htmlspecialchars($data['nama_pemakai']) ?></td>
                                         <td><?= htmlspecialchars($data['jenis_barang']) ?></td>
                                         <td><?= htmlspecialchars($data['nama_barang']) ?></td>
                                         <td><?= htmlspecialchars($data['serial_number']) ?></td>

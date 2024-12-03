@@ -69,7 +69,9 @@ if (isset($_GET['id'])) {
 </style>
 
         <div class="page-heading">
-            <h3>Riwayat</h3>
+            <h3>Riwayat Pengguna</h3>
+            <p class="text-subtitle text-muted">&nbsp;</p>
+
         </div>
 
         <section class="section">

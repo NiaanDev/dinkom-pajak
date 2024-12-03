@@ -37,12 +37,12 @@ if (isset($_GET['id'])) {
 </style>
 
         <div class="page-heading">
-            <h3>Detail Kendaraan</h3>
-            <p class="text-subtitle text-muted">Informasi Lengkap Kendaraan</p>
+            <h3>Riwayat Kerusakan</h3>
+            <p class="text-subtitle text-muted">&nbsp;</p>
         </div>
 
         <section class="section">
-        <a type="button" href="index.php?halaman=history_pemakai_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pemakai</a>
+        <a type="button" href="index.php?halaman=history_pemakai_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pengguna</a>
         <a type="button" href="index.php?halaman=detail_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Perbaikan</a>
 
             <div class="card">
@@ -52,7 +52,7 @@ if (isset($_GET['id'])) {
                         <?php if (!empty($data['foto_kendaraan'])): ?>
                             <img src="<?= htmlspecialchars($data['foto_kendaraan']) ?>" alt="Foto Kendaraan" style="width: 200px; height: auto;" />
                         <?php else: ?>
-                            <span class="text-muted">Tidak ada foto kendaraan</span>
+                            <span class="text-muted">Tidak ada foto barang</span>
                         <?php endif; ?>
                     </div>
 

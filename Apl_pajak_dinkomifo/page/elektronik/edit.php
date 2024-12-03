@@ -26,6 +26,11 @@ try {
         $serial_number = htmlspecialchars($_POST['serial_number']);
         $harga_pembelian = htmlspecialchars($_POST['harga_pembelian']);
         $kondisi = htmlspecialchars($_POST['kondisi']);
+        $nip = htmlspecialchars($_POST['nip']);
+        $alamat = htmlspecialchars($_POST['alamat']);
+        $tahun_pembelian = htmlspecialchars($_POST['tahun_pembelian']);
+        $bast = NULL;
+
 
         // Upload proof of loan
         $foto_barang = $data['foto_barang'];
@@ -91,9 +96,9 @@ try {
 
 
         // Prepare statement to update data in the database
-        $stmt = $conn->prepare("UPDATE elektronik SET jenis_barang = ?, nama_peminjam = ?, no_telepon = ?, merk = ?, serial_number = ?, kondisi = ?, harga_pembelian = ?,nama_barang = ?, foto_barang = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE elektronik SET jenis_barang = ?, nama_pemakai = ?, no_telepon = ?, merk = ?, serial_number = ?, kondisi = ?, harga_pembelian = ?,nama_barang = ?, foto_barang = ?, nip = ?, alamat = ?, tahun_pembelian = ?, bast = ? WHERE id = ?");
         $stmt->bind_param(
-            'sssssssssi',
+            'sssssssssssssi',
             $jenis_barang,
             $nama_peminjam,
             $no_telepon,
@@ -103,7 +108,12 @@ try {
             $harga_pembelian,
             $nama_barang,
             $foto_barang,
+            $nip,
+            $alamat,
+            $tahun_pembelian,
+            $bast, 
             $id
+    
         );
 
         // Execute and check success
@@ -112,13 +122,13 @@ try {
             $pengguna = !isset($_SESSION['nama']) ? 'Guest' : $_SESSION['nama'];
 
             // If pemakai has changed, log the change in history
-            if ($data['nama_peminjam'] !== $nama_peminjam) {
+            if ($data['nama_pemakai'] !== $nama_peminjam) {
                 // Insert record into history_kendaraan table
                 $history_stmt = $conn->prepare("
                     INSERT INTO history_pemakai_elektronik (id_elektronik, action, pemakai_lama, pemakai_baru, pengguna) 
                     VALUES (?, 'Update Pemakai', ?, ?, ?)
                 ");
-                $history_stmt->bind_param('isss', $id, $data['nama_peminjam'], $nama_peminjam, $pengguna);
+                $history_stmt->bind_param('isss', $id, $data['nama_pemakai'], $nama_peminjam, $pengguna);
                 $history_stmt->execute();
             }
 
@@ -180,15 +190,23 @@ try {
                             <input type="text" class="form-control" name="jenis_barang" value="<?= $data['jenis_barang'] ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="nama_peminjam">Nama Peminjam (biarkan kosong jika tidak ada Peminjam)</label>
-                            <input type="text" class="form-control" name="nama_peminjam" value="<?= $data['nama_peminjam'] ?>">
+                            <label for="nama_peminjam">Nama Pengguna</label>
+                            <input type="text" class="form-control" name="nama_peminjam" value="<?= $data['nama_pemakai'] ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="nip">NIP</label>
+                            <input type="text" class="form-control" name="nip" value="<?= $data['nip'] ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="alamat">alamat</label>
+                            <textarea class="form-control" name="alamat" value="<?= $data['alamat'] ?>"></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="no_telepon">No Telepon</label>
                             <input type="text" class="form-control" name="no_telepon" value="<?= $data['no_telepon'] ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="nama_barang">nama_barang</label>
+                            <label for="nama_barang">nama barang</label>
                             <input type="text" class="form-control" name="nama_barang" value="<?= $data['nama_barang'] ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -211,7 +229,15 @@ try {
                             <input type="number" class="form-control" name="harga_pembelian" value="<?= $data['harga_pembelian'] ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="tahun_pembelian">Tahun Pembelian</label>
+                            <input type="number" class="form-control" name="tahun_pembelian" value="<?= $data['harga_pembelian'] ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="foto_barang">Foto Barang</label>
+                            <input type="file" class="form-control" name="foto_barang">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="foto_barang">BAST</label>
                             <input type="file" class="form-control" name="foto_barang">
                         </div>
                     </div>
