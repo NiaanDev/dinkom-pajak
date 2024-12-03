@@ -10,10 +10,12 @@ if (isset($_GET['id'])) {
     $stmt->execute();
     $data = $stmt->get_result()->fetch_assoc();
 
-    $nopol_stmt = $conn->prepare("SELECT * FROM history_nopol WHERE id_kendaraan = ?");
-    $nopol_stmt->bind_param("i", $id);
-    $nopol_stmt->execute();
-    $nopol_data = $nopol_stmt->get_result()->fetch_assoc();
+        $nopol_stmt = $conn->prepare("SELECT * FROM history_nopol WHERE id_kendaraan = ?");
+        $nopol_stmt->bind_param("i", $id);
+        $nopol_stmt->execute();
+        $nopol_data = $nopol_stmt->get_result()->fetch_assoc();
+    
+    
 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -54,7 +56,7 @@ if (isset($_GET['id'])) {
         }
     }
 
-    if ($data && $nopol_data) {
+    if ($data || $nopol_data) {
         ?>
 <style>
     /* Menggunakan bullet point untuk nomor urut */
@@ -312,6 +314,7 @@ if (isset($_GET['id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <?php if($nopol_data){ ?>
                         <!-- Tabel Bootstrap -->
                         <div class="table-responsive">
                             <table class="table table-striped">
@@ -333,6 +336,11 @@ if (isset($_GET['id'])) {
                                       
                                 </tbody>
                             </table>
+                            <?php
+                            }else{
+                                echo "<p class='text-center'>Belum ada Perubahan</p>";
+                            }
+                            ?>
                         </div>
                       
                 </div>
