@@ -51,13 +51,21 @@ if (isset($_GET['id'])) {
 
     if ($data) {
         ?>
+    <style>
+            th {
+    max-width: 20px; /* Maksimum panjang kolom */
+    overflow: hidden; /* Menyembunyikan teks yang melebihi batas */
+    text-overflow: ellipsis; /* Menambahkan tanda '...' jika teks terlalu panjang */
+}
+
+    </style>
         <div class="page-heading">
             <h3>Detail Elektronik</h3>
             <p class="text-subtitle text-muted">Informasi Lengkap Barang Elektronik</p>
         </div>
 
         <section class="section">
-        <a type="button" href="index.php?halaman=history_pemakai_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pemakai</a>
+        <a type="button" href="index.php?halaman=history_pemakai_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pengguna</a>
         <a type="button" href="index.php?halaman=history_pemeliharaan_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Perbaikan</a>
             <div class="card">
                 <div class="card-body">
@@ -88,8 +96,16 @@ if (isset($_GET['id'])) {
                             <td><?= htmlspecialchars($data['jenis_barang']) ?></td>
                         </tr>
                         <tr>
-                            <th>Nama Peminjam</th>
-                            <td><?= htmlspecialchars($data['nama_peminjam']) ?></td>
+                            <th>Nama Pengguna</th>
+                            <td><?= htmlspecialchars($data['nama_pemakai']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>NIP</th>
+                            <td><?= htmlspecialchars($data['nip']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Alamat</th>
+                            <td><?= htmlspecialchars($data['alamat']) ?></td>
                         </tr>
                         <tr>
                             <th>No Telepon</th>
@@ -112,21 +128,17 @@ if (isset($_GET['id'])) {
                             <td><?= htmlspecialchars($data['harga_pembelian']) ?></td>
                         </tr>
                         <tr>
+                            <th>Tahun Pembelian</th>
+                            <td><?= htmlspecialchars($data['tahun_pembelian']) ?></td>
+                        </tr>
+
+                        <tr>
                             <th>Kondisi</th>
                             <td><?= htmlspecialchars($data['kondisi']) ?></td>
                         </tr>
                         <tr>
-                            <th>Status Peminjaman</th>
-                            <td>Dipinjam oleh <?= htmlspecialchars($data['nama_peminjam']) ?></td>
-                        </tr>
-                        <tr>
-                            <th>Keterangan</th>
-                            <?php if (!empty($data['keterangan'])): ?>
-                                <td><span class="text-muted">Barang Dalam Kondisi Normal</span></td>
-                            <?php else: ?>
-                                <td>Barang Sedang Mengalami Kerusakan belum di perbaiki</td>
-
-                            <?php endif; ?>
+                            <th>BAST</th>
+                            <td><?= htmlspecialchars($data['bast']) ?></td>
                         </tr>
                         <!-- <tr>
                             <th>Bukti Peminjaman</th>

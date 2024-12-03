@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
         </div>
 
         <section class="section">
-        <a type="button" href="index.php?halaman=history_pemakai&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pemakai</a>
+        <a type="button" href="index.php?halaman=history_pemakai&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Pengguna</a>
         <a type="button" href="index.php?halaman=detail_kendaraan&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Perbaikan</a>
 
             <div class="card">
@@ -94,6 +94,7 @@ if (isset($_GET['id'])) {
                         <thead>
                             <tr>
                                 <th> </th>
+                                <th>Tanggal Perbaikan</th>
                                 <th>Tanggal Selesai</th>
                                 <th>Kondisi</th>
                                 <th>Keterangan</th>
@@ -111,6 +112,7 @@ if (isset($_GET['id'])) {
                                         <div>•</div> <!-- Titik -->
                                         <div class="line"></div> <!-- Garis di bawah titik -->
                                         </td>
+                                        <td  style=" border: none;"><?= htmlspecialchars($row['tanggal']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['created_at']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['kondisi']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['keterangan']) ?></td>

@@ -82,10 +82,10 @@ $count = $query->num_rows;
                             <thead class="table-light">
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Jenis Barang</th>
-                                    <th class="text-center">Nama Peminjam</th>
+                                    <th class="text-center">Pengguna</th>
                                     <th class="text-center">No Telepon</th>
                                     <th class="text-center">Nama Barang</th>
+                                    <th class="text-center">Merek </th>
                                     <th class="text-center">Serial Number</th>
                                     <th class="text-center">Kondisi</th>
                                     <th class="text-center aksi-column">Aksi</th>
@@ -97,10 +97,10 @@ $count = $query->num_rows;
                                     <?php while ($data = $query->fetch_assoc()): ?>
                                         <tr>
                                             <td class="text-center"><?= $i++ ?></td>
-                                            <td><?= htmlspecialchars($data['jenis_barang']) ?></td>
-                                            <td><?= htmlspecialchars($data['nama_peminjam']) ?></td>
+                                            <td><?= htmlspecialchars($data['nama_pemakai']) ?></td>
                                             <td><?= htmlspecialchars($data['no_telepon']) ?></td>
                                             <td><?= htmlspecialchars($data['nama_barang']) ?></td>
+                                            <td><?= htmlspecialchars($data['jenis_barang']) ?></td>
                                             <td><?= htmlspecialchars($data['serial_number']) ?></td>
                                             <td><?= htmlspecialchars($data['kondisi']) ?></td>
                                             <td class="text-center aksi-column">

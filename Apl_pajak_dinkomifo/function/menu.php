@@ -96,6 +96,16 @@ if (isset($_GET['halaman'])) {
         case 'history_pemeliharaan_elektronik':
             include "page/elektronik/layout/history_perbaikan.php";
             break;
+
+        // History pemeliharaan General
+        case 'history_pemeliharaan_kendaraan_general':
+            include "page/pemeliharaan_kendaraan/layout/history.php";
+            break;
+            
+        case 'history_pemeliharaan_elektronik_general':
+            include "page/pemeliharaan_elektronik/layout/history.php";
+            break;
+
     
             
         // Halaman error jika tidak ada halaman yang ditemukan

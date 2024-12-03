@@ -145,7 +145,7 @@ if ($count > 0) {
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center">No.</th>
-                                <th class="text-center">Pemakai</th>
+                                <th class="text-center">Pengguna</th>
                                 <th class="text-center">No Telepon</th>
                                 <th class="text-center">No Plat</th>
                                 <th class="text-center">Merk</th>

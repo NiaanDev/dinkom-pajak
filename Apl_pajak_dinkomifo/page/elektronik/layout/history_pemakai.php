@@ -1,3 +1,4 @@
+
 <?php
 include "./function/koneksi.php";
 
@@ -68,12 +69,11 @@ if (isset($_GET['id'])) {
 </style>
 
         <div class="page-heading">
-            <h3>Detail Kendaraan</h3>
-            <p class="text-subtitle text-muted">Informasi Lengkap Kendaraan</p>
+            <h3>Riwayat</h3>
         </div>
 
         <section class="section">
-        <a type="button" href="index.php?halaman=detail_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Pemakai</a>
+        <a type="button" href="index.php?halaman=detail_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Pengguna</a>
         <a type="button" href="index.php?halaman=history_pemeliharaan_elektronik&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Perbaikan</a>
 
             <div class="card">
@@ -85,7 +85,7 @@ if (isset($_GET['id'])) {
                         <?php if (!empty($data['foto_kendaraan'])): ?>
                             <img src="<?= htmlspecialchars($data['foto_kendaraan']) ?>" alt="Foto Kendaraan" style="width: 200px; height: auto;" />
                         <?php else: ?>
-                            <span class="text-muted">Tidak ada foto kendaraan</span>
+                            <span class="text-muted">Tidak ada foto barang</span>
                         <?php endif; ?>
                     </div>
 
@@ -136,7 +136,7 @@ if (isset($_GET['id'])) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="kerusakanModalLabel">Detail Kerusakan Kendaraan</h5>
+                        <h5 class="modal-title" id="kerusakanModalLabel">Detail Kerusakan Kendaran</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

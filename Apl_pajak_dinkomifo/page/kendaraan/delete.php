@@ -2,37 +2,56 @@
 include "./function/koneksi.php";
 
 try {
-    $message = "";
-    $success = false;
-    $error = false;
-
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
 
-        // Select Data dan Check Data
+        // Periksa apakah data kendaraan ada
         $select = mysqli_query($conn, "SELECT * FROM kendaraan WHERE id = '$id'");
         $data = mysqli_fetch_assoc($select);
 
         if (!$data) {
-            header('Location: index.php?halaman=kendaraan');
-            exit; // Exit to stop further script execution after redirection
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Data kendaraan tidak ditemukan!',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                }).then(() => {
+                    window.location.href = 'index.php?halaman=kendaraan';
+                });
+            </script>
+            ";
+            exit;
         }
 
+        // Hapus data terkait di tabel history_pemakai
+        $deleteHistory = mysqli_query($conn, "DELETE FROM history_pemakai WHERE id_kendaraan = '$id'");
+        if (!$deleteHistory) {
+            $error = mysqli_error($conn);
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data terkait: $error',
+                    icon: 'error',
+                    showConfirmButton: true,
+                });
+            </script>
+            ";
+            exit;
+        }
 
-
-        // Delete the record
-        $query = mysqli_query($conn, "DELETE FROM kendaraan WHERE id = '$id'");
-
-        if ($query) {
-            $message = "Berhasil menghapus data";
-            $pengguna = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'Guest';
-
-
+        // Hapus data kendaraan
+        $deleteKendaraan = mysqli_query($conn, "DELETE FROM kendaraan WHERE id = '$id'");
+        if ($deleteKendaraan) {
             echo "
             <script>
                 Swal.fire({
                     title: 'Berhasil',
-                    text: '$message',
+                    text: 'Berhasil menghapus data!',
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 2000,
@@ -43,37 +62,42 @@ try {
             </script>
             ";
         } else {
-            $message = "Gagal menghapus data";
+            $error = mysqli_error($conn);
             echo "
             <script>
                 Swal.fire({
                     title: 'Gagal',
-                    text: '$message',
+                    text: 'Gagal menghapus data kendaraan: $error',
                     icon: 'error',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                }).then(() => {
-                    window.location.href = 'index.php?halaman=kendaraan';
+                    showConfirmButton: true,
                 });
             </script>
             ";
         }
     } else {
-        $message = "ID tidak ditemukan";
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Gagal',
+                text: 'ID tidak ditemukan!',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            }).then(() => {
+                window.location.href = 'index.php?halaman=kendaraan';
+            });
+        </script>
+        ";
     }
-} catch (\Throwable $th) {
+} catch (Exception $e) {
     echo "
     <script>
         Swal.fire({
             title: 'Gagal',
-            text: 'Server error!',
+            text: 'Terjadi kesalahan server: {$e->getMessage()}',
             icon: 'error',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-        }).then(() => {
-            window.location.href = 'index.php?halaman=kendaraan';
+            showConfirmButton: true,
         });
     </script>
     ";

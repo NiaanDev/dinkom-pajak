@@ -1,172 +1,91 @@
 <?php
 include "./function/koneksi.php";
-include "./function/log.php";
 
-try {
-    $message = "";
-    $success = false;
-    $error = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ambil data dari form
+    $pemakai = $_POST['pemakai'];
+    $nip = $_POST['nip'];
+    $alamat = $_POST['alamat'];
+    $no_telepon = $_POST['no_telepon'];
+    $no_plat = $_POST['no_plat'];
+    $merk = $_POST['merk'];
+    $tipe = $_POST['tipe'];
+    $tahun_pembuatan = $_POST['tahun_pembuatan'];
+    $harga_pembelian = $_POST['harga_pembelian'];
+    $tahun_pembelian = $_POST['tahun_pembelian'];
+    $tenggat_stnk = $_POST['tenggat_stnk'];
+    $tenggat_nopol = $_POST['tenggat_nopol'];
+    $kondisi = "Normal";
 
-    if (isset($_POST['submit'])) {
-        // Retrieve and sanitize form input
-        $pemakai = htmlspecialchars($_POST['pemakai']);
-        $nip = htmlspecialchars($_POST['nip']);
-        $alamat = htmlspecialchars($_POST['alamat']);
-        $no_telepon = htmlspecialchars($_POST['no_telepon']);
-        $no_plat = htmlspecialchars($_POST['no_plat']);
-        $merk = htmlspecialchars($_POST['merk']);
-        $tipe = htmlspecialchars($_POST['tipe']);
-        $tahun_pembuatan = htmlspecialchars($_POST['tahun_pembuatan']);
-        $harga_pembelian = htmlspecialchars($_POST['harga_pembelian']);
-        $tahun_pembelian = htmlspecialchars($_POST['tahun_pembelian']);
-        $tenggat_stnk = htmlspecialchars($_POST['tenggat_stnk']);
-        $tenggat_nopol = htmlspecialchars($_POST['tenggat_nopol']);
-        $kondisi = "Normal"; 
+    // Upload file
+    $foto_kendaraan = null;
+    $foto_bpkb = null;
+    $foto_stnk = null;
+    $bast = null;
 
-
-        // Upload vehicle photo
-        $foto_kendaraan = null;
-        if ($_FILES['foto_kendaraan']['name']) {
-            $target_dir = "uploads/";
-            $file_name = basename($_FILES["foto_kendaraan"]["name"]);
-            $target_file = $target_dir . time() . '_foto_' . $file_name;
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-            // Validate image file
-            $check = getimagesize($_FILES["foto_kendaraan"]["tmp_name"]);
-            if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-                if (move_uploaded_file($_FILES["foto_kendaraan"]["tmp_name"], $target_file)) {
-                    $foto_kendaraan = $target_file;
-                } else {
-                    echo "Error uploading vehicle photo.";
-                }
-            } else {
-                echo "Only JPG, JPEG, and PNG files are allowed.";
-            }
+    // Fungsi upload file
+    function uploadFile($file, $targetDir)
+    {
+        if (!empty($file['name'])) {
+            $fileName = basename($file['name']);
+            $targetFilePath = $targetDir . $fileName;
+            move_uploaded_file($file['tmp_name'], $targetFilePath);
+            return $targetFilePath;
         }
-                // Upload P.BPKB
-                $foto_bpkb = null;
-                if ($_FILES['foto_kendaraan']['name']) {
-                    $target_dir = "uploads/";
-                    $file_name = basename($_FILES["foto_kendaraan"]["name"]);
-                    $target_file = $target_dir . time() . '_foto_' . $file_name;
-                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        
-                    // Validate image file
-                    $check = getimagesize($_FILES["foto_kendaraan"]["tmp_name"]);
-                    if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-                        if (move_uploaded_file($_FILES["foto_kendaraan"]["tmp_name"], $target_file)) {
-                            $foto_kendaraan = $target_file;
-                        } else {
-                            echo "Error uploading vehicle photo.";
-                        }
-                    } else {
-                        echo "Only JPG, JPEG, and PNG files are allowed.";
-                    }
-                }
-
-                // Upload P.STNK 
-                $foto_stnk = null;
-                if ($_FILES['foto_kendaraan']['name']) {
-                    $target_dir = "uploads/";
-                    $file_name = basename($_FILES["foto_kendaraan"]["name"]);
-                    $target_file = $target_dir . time() . '_foto_' . $file_name;
-                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        
-                    // Validate image file
-                    $check = getimagesize($_FILES["foto_kendaraan"]["tmp_name"]);
-                    if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-                        if (move_uploaded_file($_FILES["foto_kendaraan"]["tmp_name"], $target_file)) {
-                            $foto_kendaraan = $target_file;
-                        } else {
-                            echo "Error uploading vehicle photo.";
-                        }
-                    } else {
-                        echo "Only JPG, JPEG, and PNG files are allowed.";
-                    }
-                }
-
-        // Upload payment proof
-        $bukti_pembayaran = null;
-        if ($_FILES['bukti_pembayaran']['name']) {
-            $file_name = basename($_FILES["bukti_pembayaran"]["name"]);
-            $target_file = $target_dir . time() . '_bukti_' . $file_name;
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-            // Validate image file
-            $check = getimagesize($_FILES["bukti_pembayaran"]["tmp_name"]);
-            if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-                if (move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $target_file)) {
-                    $bukti_pembayaran = $target_file;
-                } else {
-                    echo "Error uploading payment proof.";
-                }
-            } else {
-                echo "Only JPG, JPEG, and PNG files are allowed.";
-            }
-        }
-        // Upload file BAST
-        $bast = null;
-        if ($_FILES['bukti_pembayaran']['name']) {
-            $file_name = basename($_FILES["bukti_pembayaran"]["name"]);
-            $target_file = $target_dir . time() . '_bukti_' . $file_name;
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-            // Validate image file
-            $check = getimagesize($_FILES["bukti_pembayaran"]["tmp_name"]);
-            if ($check !== false && in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-                if (move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $target_file)) {
-                    $bukti_pembayaran = $target_file;
-                } else {
-                    echo "Error uploading payment proof.";
-                }
-            } else {
-                echo "Only JPG, JPEG, and PNG files are allowed.";
-            }
-        }
-        // Prepare statement to insert data into the database
-        $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, bukti_pembayaran, status_pemeliharaan, alamat, bast, nip, tahun_pembelian, foto_stnk, foto_bpkb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param(
-            'ssssssdsssss',
-            $pemakai,
-            $no_telepon,
-            $no_plat,
-            $merk,
-            $tipe,
-            $tahun_pembuatan,
-            $harga_pembelian,
-            $tenggat_stnk,
-            $tenggat_nopol,
-            $foto_kendaraan,
-            $bukti_pembayaran,
-            $kondisi
-        );
-
-        // Execute and check success
-        if ($stmt->execute()) {        
-            $message = "Successfully added vehicle data";
-            echo "
-            <script>
-                Swal.fire({
-                    title: 'Success',
-                    text: '$message',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                }).then(() => {
-                    window.location.href = 'index.php?halaman=kendaraan';
-                });
-            </script>
-            ";
-        } else {
-            $message = "Failed to add vehicle data";
-            $error = true;
-        }
+        return null;
     }
-} catch (Exception $e) {
-    $error = true;
-    $message = "Error occurred: " . $e->getMessage();
+
+    // Tentukan direktori penyimpanan
+    $uploadDir = "uploads/";
+
+    // Proses unggah file
+    $foto_kendaraan = uploadFile($_FILES['foto_kendaraan'], $uploadDir);
+    $foto_bpkb = uploadFile($_FILES['foto_bpkb'], $uploadDir);
+    $foto_stnk = uploadFile($_FILES['foto_stnk'], $uploadDir);
+    $bast = uploadFile($_FILES['bast'], $uploadDir);
+
+    // Insert ke database
+    $stmt = $conn->prepare("INSERT INTO kendaraan (pemakai, nip, alamat, no_telepon, no_plat, merk, tipe, tahun_pembuatan, harga_pembelian, tahun_pembelian, tenggat_stnk, tenggat_nopol, foto_kendaraan, foto_bpkb, foto_stnk, bast, status_pemeliharaan) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param(
+        "sssssssssssssssss",
+        $pemakai,
+        $nip,
+        $alamat,
+        $no_telepon,
+        $no_plat,
+        $merk,
+        $tipe,
+        $tahun_pembuatan,
+        $harga_pembelian,
+        $tahun_pembelian,
+        $tenggat_stnk,
+        $tenggat_nopol,
+        $foto_kendaraan,
+        $foto_bpkb,
+        $foto_stnk,
+        $bast,
+        $kondisi
+    );
+
+    if ($stmt->execute()) {
+        echo "<script>
+            Swal.fire({
+                title: 'Data Berhasil Ditambahkan!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            }).then(() => {
+                window.location.href = 'index.php?halaman=kendaraan';
+            });
+        </script>";
+    } else {
+        echo "<script>
+            alert('Gagal menambahkan data!');
+            window.location.href = 'index.php?halaman=kendaraan';
+        </script>";
+    }
 }
 ?>
 
@@ -188,68 +107,95 @@ try {
         </div>
     </div>
 
-    <section class="section">
-        <div class="card">
-            <div class="card-body">
-                <?php if ($error) : ?>
-                    <div class="alert alert-danger"><?= $message ?></div>
-                <?php endif; ?>
-                <form action="" method="POST" enctype="multipart/form-data">
-                    <div class="row">
-                        <!-- Form input fields -->
-                        <div class="col-md-6 mb-3">
-                            <label for="pemakai">Pemakai</label>
-                            <input type="text" class="form-control" name="pemakai" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="no_telepon">No Telepon</label>
-                            <input type="text" class="form-control" name="no_telepon" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="no_plat">Plat Nomor</label>
-                            <input type="text" class="form-control" name="no_plat" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="merk">Merk</label>
-                            <input type="text" class="form-control" name="merk" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tipe">Tipe</label>
-                            <select name="tipe" class="form-control" required>
-                                <option value="Motor">Motor</option>
-                                <option value="Mobil">Mobil</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tahun_pembuatan">Tahun Pembuatan</label>
-                            <input type="number" class="form-control" name="tahun_pembuatan" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="harga_pembelian">Harga Pembelian</label>
-                            <input type="number" class="form-control" name="harga_pembelian" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tenggat_stnk">Tenggat STNK</label>
-                            <input type="date" class="form-control" name="tenggat_stnk" required>
-                        </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tenggat_nopol">Tenggat No. Polisi</label>
-                            <input type="date" class="form-control" name="tenggat_nopol" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="foto_kendaraan">Foto Kendaraan</label>
-                            <input type="file" class="form-control" name="foto_kendaraan">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="bukti_pembayaran">Bukti Pembayaran</label>
-                            <input type="file" class="form-control" name="bukti_pembayaran">
-                        </div>
-                    </div>
-                    <button type="submit" name="submit" class="btn btn-primary">Tambah Data</button>
-                    <a href="index.php?halaman=kendaraan" class="btn btn-secondary">Batal</a>
-                </form>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Kendaraan</title>
+    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Ganti dengan lokasi file CSS -->
+    <script src="path/to/sweetalert2.js"></script> <!-- Ganti dengan lokasi file JS -->
+    <style>
+        .form-control {
+            font-size: 0.9rem;
+            padding: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="pemakai" class="form-label">Pengguna</label>
+                    <input type="text" class="form-control" id="pemakai" name="pemakai" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="nip" class="form-label">NIP</label>
+                    <input type="text" class="form-control" id="nip" name="nip" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="alamat" class="form-label">Alamat</label>
+                    <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="no_telepon" class="form-label">No. Telepon</label>
+                    <input type="text" class="form-control" id="no_telepon" name="no_telepon" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="no_plat" class="form-label">No. Polisi</label>
+                    <input type="text" class="form-control" id="no_plat" name="no_plat" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="merk" class="form-label">Merk</label>
+                    <input type="text" class="form-control" id="merk" name="merk" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="tipe" class="form-label">Tipe</label>
+                    <input type="text" class="form-control" id="tipe" name="tipe" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="tahun_pembuatan" class="form-label">Tahun Pembuatan</label>
+                    <input type="text" class="form-control" id="tahun_pembuatan" name="tahun_pembuatan" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="harga_pembelian" class="form-label">Harga Pembelian</label>
+                    <input type="number" class="form-control" id="harga_pembelian" name="harga_pembelian" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="tahun_pembelian" class="form-label">Tahun Pembelian</label>
+                    <input type="text" class="form-control" id="tahun_pembelian" name="tahun_pembelian" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="tenggat_stnk" class="form-label">Tenggat STNK</label>
+                    <input type="date" class="form-control" id="tenggat_stnk" name="tenggat_stnk" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="tenggat_nopol" class="form-label">Tenggat NOPOL</label>
+                    <input type="date" class="form-control" id="tenggat_nopol" name="tenggat_nopol" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="foto_kendaraan" class="form-label">Foto Kendaraan</label>
+                    <input type="file" class="form-control" id="foto_kendaraan" name="foto_kendaraan">
+                </div>
+                <div class="col-md-6">
+                    <label for="foto_bpkb" class="form-label">Foto BPKB</label>
+                    <input type="file" class="form-control" id="foto_bpkb" name="foto_bpkb">
+                </div>
+                <div class="col-md-6">
+                    <label for="foto_stnk" class="form-label">Foto STNK</label>
+                    <input type="file" class="form-control" id="foto_stnk" name="foto_stnk">
+                </div>
+                <div class="col-md-6">
+                    <label for="bast" class="form-label">BAST</label>
+                    <input type="file" class="form-control" id="bast" name="bast">
+                </div>
             </div>
-        </div>
-    </section>
-</div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Tambah Data</button>
+                <a href="index.php?halaman=kendaraan" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -9,10 +9,10 @@ try {
     // Memastikan hanya menampilkan data dengan status pemeliharaan 'Perbaikan'
     if ($statusFilter == 'Semua') {
         // Tidak ada filter untuk status jika 'Semua', menampilkan semua data
-        $stmt = $conn->prepare("SELECT * FROM kendaraan WHERE status_pemeliharaan = 'Perbaikan' ORDER BY tanggal_pemeliharaan DESC");
+        $stmt = $conn->prepare("SELECT * FROM history_perbaikan_kendaraan ORDER BY created_at DESC");
     } else {
         // Menampilkan data dengan filter status_pemeliharaan
-        $stmt = $conn->prepare("SELECT * FROM kendaraan WHERE status_pemeliharaan = 'Perbaikan' AND status_pemeliharaan = ? ORDER BY tanggal_pemeliharaan DESC");
+        $stmt = $conn->prepare("SELECT * FROM history_perbaikan_kendaraan ORDER BY te DESC");
         $stmt->bind_param('s', $statusFilter);
     }
 
@@ -40,7 +40,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pemeliharaan Kendaraan</title>
+    <title>History Pemeliharaan Kendaraan</title>
     <link rel="stylesheet" href="path/to/bootstrap.css">
     <style>
         /* Compact table style */
@@ -84,8 +84,7 @@ try {
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Data Pemeliharaan Kendaraan</h3>
-                <p class="text-subtitle text-muted">Halaman Tampil Data Pemeliharaan</p>
+                <h3>History Pemeliharaan Kendaraan</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -133,39 +132,37 @@ try {
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table">
+                    <table class="table table-bordered fs-8" id="table">
                         <thead class="table-light">
                             <tr>
-                                <th class="text-center">No.</th>
-                                <th class="text-center">Nama Pengguna</th>
-                                <th class="text-center">No Telepon</th>
-                                <th class="text-center">Jenis Kendaraan</th>
+                                <th class="text-center">id</th>
+                                <th class="text-center">tanggal Perbaikan</th>
+                                <th class="text-center">Selesai Perbaikan</th>
+                                <th class="text-center">Pengguna</th>
+                                <th class="text-center">NIP</th>
+                                <th class="text-center">Nama Kendaraan</th>
                                 <th class="text-center">Plat Nomor</th>
-                                <th class="text-center">Keterangan</th>
-                                <th class="text-center">Tanggal Pemeliharaan</th>
-                                <th class="text-center aksi-column">Aksi</th>
-                            </tr>
+                                <th class="text-center">kerusakan</th>
+                                <th class="text-center">keterangan perbaikan</th>
+                                <th class="text-center">biaya</th>
+                                <th class="text-center">bukti</th>
                         </thead>
                         <tbody>
                             <?php if ($count > 0) : ?>
                                 <?php $i = 1; ?>
                                 <?php while ($data = $query->fetch_assoc()) : ?>
                                     <tr>
-                                        <td class="text-center"><?= $i++ ?></td>
-                                        <td><?= htmlspecialchars($data['pemakai']) ?></td>
-                                        <td><?= htmlspecialchars($data['no_telepon']) ?></td>
-                                        <td><?= htmlspecialchars($data['tipe']) ?></td>
-                                        <td><?= htmlspecialchars($data['no_plat']) ?></td>
+                                        <td class="text-center"> <?= htmlspecialchars($data['id_kendaraan']) ?></td>
+                                        <td><?= htmlspecialchars($data['tanggal']) ?></td>
+                                        <td><?= htmlspecialchars($data['created_at']) ?></td>
+                                        <td><?= htmlspecialchars($data['pengguna']) ?></td>
+                                        <td><?= htmlspecialchars($data['nip']) ?></td>
+                                        <td><?= htmlspecialchars($data['nama_kendaraan']) ?></td>
+                                        <td><?= htmlspecialchars($data['plat']) ?></td>
                                         <td><?= htmlspecialchars($data['kondisi']) ?></td>
-                                        <td><?= htmlspecialchars($data['tanggal_pemeliharaan']) ?></td>
-                                        <td class="text-center aksi-column">
-                                            <a class="btn btn-warning btn-sm" href="index.php?halaman=ubah_pemeliharaan_kendaraan&id=<?= $data['id'] ?>" title="Edit">
-                                                <i class="bi bi-wrench"></i> Lakukan Perbaikan
-                                            </a>
-                                            <a class="btn btn-danger btn-sm" href="index.php?halaman=hapus_pemeliharaan_kendaraan&id=<?= $data['id'] ?>" title="Delete" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </a>
-                                        </td>
+                                        <td><?= htmlspecialchars($data['keterangan']) ?></td>
+                                        <td><?= htmlspecialchars($data['biaya']) ?></td>
+                                        <td></td>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else : ?>

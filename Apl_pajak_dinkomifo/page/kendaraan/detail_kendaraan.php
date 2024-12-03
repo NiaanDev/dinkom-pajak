@@ -249,11 +249,11 @@ if (isset($_GET['id'])) {
                             
                         </tr>
                         <tr>
-                            <th>Bukti Pembayaran</th>
+                            <th>Foto STNK</th>
                             <td>
-                                <?php if (!empty($data['bukti_pembayaran'])): ?>
+                                <?php if (!empty($data['foto_stnk'])): ?>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
-                                            onclick="showImage('<?= htmlspecialchars($data['bukti_pembayaran']) ?>')">
+                                            onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>')">
                                         <i class="bi bi-file-earmark-text"></i> Lihat Bukti
                                     </button>
                                 <?php else: ?>
@@ -317,14 +317,49 @@ if (isset($_GET['id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post">
-                            <div class="mb-3">
-                                <label for="kerusakan" class="form-label">Deskripsi Kerusakan</label>
-                                <textarea name="kerusakan" id="kerusakan" class="form-control" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Konfirmasi</button>
-                        </form>
-                    </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered fs-8" id="table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center">id</th>
+                                        <th class="text-center">tanggal Perbaikan</th>
+                                        <th class="text-center">Selesai Perbaikan</th>
+                                        <th class="text-center">Pengguna</th>
+                                        <th class="text-center">NIP</th>
+                                        <th class="text-center">Nama Kendaraan</th>
+                                        <th class="text-center">Plat Nomor</th>
+                                        <th class="text-center">kerusakan</th>
+                                        <th class="text-center">keterangan perbaikan</th>
+                                        <th class="text-center">biaya</th>
+                                        <th class="text-center">bukti</th>
+                                </thead>
+                                <tbody>
+                                    <?php if ($count > 0) : ?>
+                                        <?php $i = 1; ?>
+                                        <?php while ($data = $query->fetch_assoc()) : ?>
+                                            <tr>
+                                                <td class="text-center"> <?= htmlspecialchars($data['id_kendaraan']) ?></td>
+                                                <td><?= htmlspecialchars($data['tanggal']) ?></td>
+                                                <td><?= htmlspecialchars($data['created_at']) ?></td>
+                                                <td><?= htmlspecialchars($data['pengguna']) ?></td>
+                                                <td><?= htmlspecialchars($data['nip']) ?></td>
+                                                <td><?= htmlspecialchars($data['nama_kendaraan']) ?></td>
+                                                <td><?= htmlspecialchars($data['plat']) ?></td>
+                                                <td><?= htmlspecialchars($data['kondisi']) ?></td>
+                                                <td><?= htmlspecialchars($data['keterangan']) ?></td>
+                                                <td><?= htmlspecialchars($data['biaya']) ?></td>
+                                                <td></td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    <?php else : ?>
+                                        <tr>
+                                            <td colspan="8" class="text-center">Tidak ada data pemeliharaan.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                </div>
+                </div>
                 </div>
             </div>
         </div>
