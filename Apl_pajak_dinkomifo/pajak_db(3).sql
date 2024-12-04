@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2024 at 06:40 AM
+-- Generation Time: Dec 04, 2024 at 04:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,16 +42,40 @@ CREATE TABLE `elektronik` (
   `nama_barang` varchar(50) DEFAULT NULL,
   `keterangan_kerusakan` varchar(100) DEFAULT NULL,
   `biaya_pemeliharaan` decimal(10,2) DEFAULT NULL,
-  `harga_pembelian` decimal(15,2) DEFAULT NULL
+  `harga_pembelian` decimal(15,2) DEFAULT NULL,
+  `tahun_pembelian` varchar(50) DEFAULT NULL,
+  `alamat` varchar(50) DEFAULT NULL,
+  `nip` varchar(50) DEFAULT NULL,
+  `bast` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `elektronik`
 --
 
-INSERT INTO `elektronik` (`id`, `jenis_barang`, `nama_pemakai`, `no_telepon`, `merk`, `serial_number`, `kondisi`, `tanggal_pemeliharaan`, `keterangan`, `bukti_pemeliharaan`, `foto_barang`, `nama_barang`, `keterangan_kerusakan`, `biaya_pemeliharaan`, `harga_pembelian`) VALUES
-(11, 'kamera', 'robana', '0988777', 'aaa', '09imjhjuu', 'normal', '2024-12-01', NULL, NULL, NULL, 'opkoo', 'lknlkljl', 20000.00, 9999000.00),
-(12, 'psaopoas', 'oasoj', '88898899', 'iii', '7s7a8sd', 'normal', NULL, NULL, NULL, NULL, 'iaoasi', NULL, NULL, 200000.00);
+INSERT INTO `elektronik` (`id`, `jenis_barang`, `nama_pemakai`, `no_telepon`, `merk`, `serial_number`, `kondisi`, `tanggal_pemeliharaan`, `keterangan`, `bukti_pemeliharaan`, `foto_barang`, `nama_barang`, `keterangan_kerusakan`, `biaya_pemeliharaan`, `harga_pembelian`, `tahun_pembelian`, `alamat`, `nip`, `bast`) VALUES
+(13, 'drone', 'aaaa', '90909090', 'dji', '8s8s88s8', 'normal', NULL, NULL, NULL, NULL, 'drone dji', NULL, NULL, 220000.00, '2020', 'lalalalla', '9s99s9s', NULL),
+(14, 'hshhshs', 'rrrr', 'jjjehhh', 'jsjhsh', 'eejjjj', 'normal', NULL, NULL, NULL, 'uploads/1733199477_foto_WhatsApp Image 2024-09-02 at 21.47.40_8c1592b9 1.png', 'eejjjj', NULL, NULL, 12000.00, '2020', 'dsfgssh', 'jjjjjj', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_nopol`
+--
+
+CREATE TABLE `history_nopol` (
+  `tanggal_perubahan` date NOT NULL DEFAULT current_timestamp(),
+  `nopol` varchar(50) NOT NULL,
+  `id_kendaraan` int(11) NOT NULL,
+  `pemakai` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `history_nopol`
+--
+
+INSERT INTO `history_nopol` (`tanggal_perubahan`, `nopol`, `id_kendaraan`, `pemakai`) VALUES
+('2024-12-03', '00AA0000', 19, NULL);
 
 -- --------------------------------------------------------
 
@@ -75,10 +99,8 @@ CREATE TABLE `history_pemakai` (
 --
 
 INSERT INTO `history_pemakai` (`id`, `pemakai_lama`, `pemakai_baru`, `tanggal_perubahan`, `user_perubah`, `id_kendaraan`, `action`, `pengguna`) VALUES
-(1, 'maca', 'masa', '2024-11-28 13:27:37', NULL, 13, 'Update Pemakai', 'aa'),
-(2, 'masa', 'masako', '2024-11-28 13:39:21', NULL, 13, 'Update Pemakai', 'aa'),
-(3, 'masako', 'deka', '2024-11-28 14:44:46', NULL, 13, 'Update Pemakai', 'aa'),
-(4, 'deka', 'dekaaaa', '2024-12-02 07:04:59', NULL, 13, 'Update Pemakai', 'a');
+(5, 'YANTOoa', NULL, '2024-12-03 12:35:30', NULL, 19, 'Update Pemakai', 'a'),
+(6, 'YANTOoa', 'YA', '2024-12-03 12:37:37', NULL, 19, 'Update Pemakai', 'a');
 
 -- --------------------------------------------------------
 
@@ -102,7 +124,8 @@ CREATE TABLE `history_pemakai_elektronik` (
 --
 
 INSERT INTO `history_pemakai_elektronik` (`id`, `pemakai_lama`, `pemakai_baru`, `tanggal_perubahan`, `user_perubah`, `id_elektronik`, `action`, `pengguna`) VALUES
-(1, 'rob', 'robana', '2024-12-02 07:01:47', NULL, 11, 'Update Pemakai', 'a');
+(1, 'rob', 'robana', '2024-12-02 07:01:47', NULL, 11, 'Update Pemakai', 'a'),
+(2, NULL, 'robana', '2024-12-03 11:09:01', NULL, 11, 'Update Pemakai', 'a');
 
 -- --------------------------------------------------------
 
@@ -118,16 +141,18 @@ CREATE TABLE `history_perbaikan_elektronik` (
   `keterangan` text DEFAULT NULL,
   `bukti_pembayaran` varchar(255) DEFAULT NULL,
   `pengguna` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `nip` varchar(50) DEFAULT NULL,
+  `nama_barang` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `history_perbaikan_elektronik`
 --
 
-INSERT INTO `history_perbaikan_elektronik` (`id_elektronik`, `kondisi`, `tanggal`, `biaya`, `keterangan`, `bukti_pembayaran`, `pengguna`, `created_at`) VALUES
-(11, 'uhouhuh', '2024-11-01', 20000.00, 'hhuuuuo', NULL, 'rob', '2024-12-01 21:47:12'),
-(11, 'uhouhuh', '2024-11-01', 20000.00, 'hhuuuuo', NULL, 'rob', '2024-12-01 21:48:48');
+INSERT INTO `history_perbaikan_elektronik` (`id_elektronik`, `kondisi`, `tanggal`, `biaya`, `keterangan`, `bukti_pembayaran`, `pengguna`, `created_at`, `nip`, `nama_barang`) VALUES
+(11, 'uhouhuh', '2024-11-01', 20000.00, 'hhuuuuo', NULL, 'rob', '2024-12-01 21:47:12', NULL, NULL),
+(11, 'uhouhuh', '2024-11-01', 20000.00, 'hhuuuuo', NULL, 'rob', '2024-12-01 21:48:48', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -143,17 +168,20 @@ CREATE TABLE `history_perbaikan_kendaraan` (
   `keterangan` text DEFAULT NULL,
   `bukti_pembayaran` varchar(255) DEFAULT NULL,
   `pengguna` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `nama_kendaraan` varchar(50) DEFAULT NULL,
+  `plat` varchar(50) DEFAULT NULL,
+  `nip` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `history_perbaikan_kendaraan`
 --
 
-INSERT INTO `history_perbaikan_kendaraan` (`id_kendaraan`, `kondisi`, `tanggal`, `biaya`, `keterangan`, `bukti_pembayaran`, `pengguna`, `created_at`) VALUES
-(13, ';mamkak', '2024-11-30', 100.00, ';;kkaaa', NULL, 'deka', '2024-11-30 21:58:09'),
-(13, 'lmlkmlmlkmkl', '2024-11-30', 100.00, ';alalla', NULL, 'deka', '2024-11-30 22:02:13'),
-(13, 'kkkkjkjhhk', '2024-12-02', 100.00, '', NULL, 'dekaaaa', '2024-12-02 03:33:30');
+INSERT INTO `history_perbaikan_kendaraan` (`id_kendaraan`, `kondisi`, `tanggal`, `biaya`, `keterangan`, `bukti_pembayaran`, `pengguna`, `created_at`, `nama_kendaraan`, `plat`, `nip`) VALUES
+(13, ';mamkak', '2024-11-30', 100.00, ';;kkaaa', NULL, 'deka', '2024-11-30 21:58:09', NULL, NULL, NULL),
+(13, 'lmlkmlmlkmkl', '2024-11-30', 100.00, ';alalla', NULL, 'deka', '2024-11-30 22:02:13', NULL, NULL, NULL),
+(13, 'kkkkjkjhhk', '2024-12-02', 100.00, '', NULL, 'dekaaaa', '2024-12-02 03:33:30', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -183,7 +211,7 @@ CREATE TABLE `kendaraan` (
   `alamat` varchar(255) DEFAULT NULL,
   `bast` varchar(255) DEFAULT NULL,
   `nip` varchar(255) DEFAULT NULL,
-  `tahun_pembelian` date DEFAULT NULL,
+  `tahun_pembelian` varchar(10) DEFAULT NULL,
   `foto_stnk` varchar(255) DEFAULT NULL,
   `foto_bpkb` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -193,14 +221,14 @@ CREATE TABLE `kendaraan` (
 --
 
 INSERT INTO `kendaraan` (`id`, `pemakai`, `no_telepon`, `no_plat`, `merk`, `tipe`, `tahun_pembuatan`, `harga_pembelian`, `tenggat_stnk`, `tenggat_nopol`, `foto_kendaraan`, `bukti_pembayaran`, `tanggal_pemeliharaan`, `biaya_pemeliharaan`, `kondisi`, `bukti`, `status_pemeliharaan`, `keterangan`, `alamat`, `bast`, `nip`, `tahun_pembelian`, `foto_stnk`, `foto_bpkb`) VALUES
-(13, 'dekaaaa', '98098', '09890', '980999999', 'Motor', 9020, 9898908.00, '2025-12-03', '2029-12-26', NULL, NULL, '2024-12-02', 100.00, 'kkkkjkjhhk', NULL, 'Normal', '', NULL, NULL, NULL, NULL, NULL, NULL),
-(14, 'santi', '988090', '98980', 'MIU', 'Motor', 9009, 890809.00, '1987-12-01', '2029-11-26', NULL, NULL, '2024-12-02', 200000.00, 'meledak', NULL, 'Perbaikan', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 'YANTO', '987897', '798798', '987987', 'Motor', 987987, 97987.00, '2024-01-01', '2024-01-01', 'uploads/1730689944_foto_Screenshot (36).png', 'uploads/1730689944_bukti_Screenshot (35).png', '2024-11-28', 1000000.00, 'Mobil Mengalami Kebakaran', NULL, 'Normal', 'aaaaa', NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'YA', '987897', '999ss', '987987', 'Motor', 987987, 97987.00, '2024-01-01', '2024-01-01', 'uploads/1733199362_IMG_25r34.JPG', 'uploads/1730689944_bukti_Screenshot (35).png', '2024-11-28', 1000000.00, 'Mobil Mengalami Kebakaran', NULL, 'Normal', 'aaaaa', 'dgdhffjkfkfkf', 'uploads/1733199362_lamaran kerja_untuk_barista.pdf.pdf', '839300303', '2020', 'uploads/1733199362_IMG_2474.JPG', 'uploads/1733199362_IMG_2475.JPG'),
 (20, 'hjbj', 'hjbwjhb', 'jhbsjhb', 'jhsbjhwb', 'Motor', 9878, 8798.00, '0000-00-00', '0888-08-07', 'uploads/1730689997_foto_Screenshot (36).png', 'uploads/1730689997_bukti_Screenshot (35).png', '2024-11-30', 10000.00, 'mususus', NULL, 'Normal', 'hahasss', NULL, NULL, NULL, NULL, NULL, NULL),
 (21, 'jjjjj', '0987777', 'j67788jj', 'aaa', 'Motor', 2018, 876666.00, '0000-00-00', '2024-11-22', 'uploads/1730768645_foto_Screenshot (35).png', NULL, '2024-11-29', 222999.00, 'assaasjosa', NULL, 'Normal', 'snjasja', NULL, NULL, NULL, NULL, NULL, NULL),
 (23, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '2010-12-11', '2024-12-25', NULL, NULL, '2024-12-01', NULL, 'sndlkasnkdas', NULL, 'Perbaikan', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (24, 'UUS', '09090909', '87s7s8', 'HND', 'Motor', 2022, 288882.00, '0000-00-00', '2024-12-25', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 'kiis', '0802828', '778ss', 'KOBRA', 'Motor', 2011, 200002.00, '0000-00-00', '2016-12-06', NULL, NULL, NULL, NULL, NULL, NULL, 'Normal', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(25, 'kiis', '0802828', '778ss', 'KOBRA', 'Motor', 2011, 200002.00, '0000-00-00', '2016-12-06', NULL, NULL, NULL, NULL, NULL, NULL, 'Normal', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(26, 'suparjo', '88008080', '88UUBG', 'HONDA', 'Motor', 2020, 20000000.00, '2025-12-02', '2026-12-16', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'dusun ngarogsari', NULL, '788887888', '0000-00-00', NULL, NULL),
+(27, 'poo', '090909', '022', 'IISS', 'MOTOR', 2020, 99900.00, '2025-12-10', '2025-01-15', NULL, NULL, NULL, NULL, NULL, NULL, 'Normal', NULL, 'aaaaaa', NULL, '9901', '2011', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -482,25 +510,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `elektronik`
 --
 ALTER TABLE `elektronik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `history_pemakai`
 --
 ALTER TABLE `history_pemakai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `history_pemakai_elektronik`
 --
 ALTER TABLE `history_pemakai_elektronik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kendaraan`
 --
 ALTER TABLE `kendaraan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `log_histori`
