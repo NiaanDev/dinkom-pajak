@@ -164,17 +164,15 @@ if (isset($_GET['id'])) {
                             <th>Foto BPKB</th>
                             <td>                              
                             <?php if (!empty($data['foto_bpkb'])): ?>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
-                                            onclick="showImage('<?= htmlspecialchars($data['foto_bpkb']) ?>')">
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#BPKBModal" 
+                                            onclick="showImage('<?= htmlspecialchars($data['foto_bpkb']) ?>', 'BPKBModal')">
                                         <i class="bi bi-file-earmark-text"></i> Lihat BPKB
                                     </button>
+                                
                                 <?php else: ?>
                                     <span class="text-muted">Tidak ada Foto BPKB</span>
                                 <?php endif; ?>
-</td>
                         </tr>
-
-
                         <tr>
                         <th>Status Pajak</th>
                         <?php
@@ -253,12 +251,12 @@ if (isset($_GET['id'])) {
                             <th>Foto STNK</th>
                             <td>
                                 <?php if (!empty($data['foto_stnk'])): ?>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
-                                            onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>')">
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#STNKModal" 
+                                            onclick="showImage('<?= htmlspecialchars($data['foto_stnk']) ?>', 'STNKModal')">
                                         <i class="bi bi-file-earmark-text"></i> Lihat Foto STNK
                                     </button>
                                 <?php else: ?>
-                                    <span class="text-muted">Tidak ada bukti pembayaran pajak</span>
+                                    <span class="text-muted">Tidak ada bukti stnk</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -310,7 +308,7 @@ if (isset($_GET['id'])) {
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="nopolModalLabel">Dummy</h5>
+                        <h5 class="modal-title" id="nopolModalLabel">Detail Perubahan NO. Polisi</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -349,11 +347,12 @@ if (isset($_GET['id'])) {
         </div>
 
         <!-- Modal untuk menampilkan gambar bukti pembayaran -->
-        <div class="modal fade" id="paymentProofModal" tabindex="-1" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
+        <div class="modal fade" id="BPKBModal" tabindex="-1" aria-labelledby="BPKBModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="paymentProofModalLabel">Bukti Pembayaran</h5>
+                        <h5 class="modal-title" id="BPKBModalLabel">Bukti Pembayaran</h5>
+                        
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
@@ -362,13 +361,31 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="STNKModal" tabindex="-1" aria-labelledby="STNKModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="STNKModalLabel">Bukti STNK</h5>
+                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="" class="img-fluid" alt="Bukti STNK" />
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
 
 
         <script>
-            function showImage(imageSrc) {
-                const modalImage = document.getElementById('modalImage');
+            function showImage(imageSrc, modalId) {
+                const modalImage = document.querySelector(`#${modalId} img`);
                 modalImage.src = imageSrc;
+                // Memastikan modal ditampilkan setelah gambar diatur
+                const modal = new bootstrap.Modal(document.getElementById(modalId));
+                modal.show();
             }
             function showPDF(pdfSrc) {
                 const modalPDF = document.getElementById('modalPDF');

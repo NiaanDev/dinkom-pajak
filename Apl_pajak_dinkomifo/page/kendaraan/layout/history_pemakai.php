@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
         </div>
 
         <section class="section">
-        <a type="button" href="index.php?halaman=detail_kendaraan&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Pemakai</a>
+        <a type="button" href="index.php?halaman=detail_kendaraan&id=<?= $data['id'] ?>" class="btn btn-secondary active">Riwayat Pengguna</a>
         <a type="button" href="index.php?halaman=history_pemeliharaan&id=<?= $data['id'] ?>" class="btn btn-secondary">Riwayat Perbaikan</a>
 
             <div class="card">

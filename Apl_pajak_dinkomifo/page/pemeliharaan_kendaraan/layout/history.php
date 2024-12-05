@@ -162,7 +162,17 @@ try {
                                         <td><?= htmlspecialchars($data['kondisi']) ?></td>
                                         <td><?= htmlspecialchars($data['keterangan']) ?></td>
                                         <td><?= htmlspecialchars($data['biaya']) ?></td>
-                                        <td></td>
+                                        <td>
+                                            <?php if (!empty($data['bukti_pembayaran'])): ?>
+                                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
+                                                            onclick="showImage('<?= htmlspecialchars($data['bukti_pembayaran']) ?>')">
+                                                        <i class="bi bi-file-earmark-text"></i> 
+                                                    </button>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Tidak ada Bukti</span>
+                                                <?php endif; ?>
+
+                                        </td>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else : ?>
@@ -176,6 +186,21 @@ try {
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="paymentProofModal" tabindex="-1" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentProofModalLabel">Bukti Pembayaran</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="" class="img-fluid" alt="Bukti Pembayaran" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </section>
 </div>
 

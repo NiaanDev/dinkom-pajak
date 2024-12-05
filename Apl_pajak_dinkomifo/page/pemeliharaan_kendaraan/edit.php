@@ -43,23 +43,28 @@ try {
 
 
             // Handle file upload for bukti pemeliharaan
-            $bukti = $data['bukti']; // Keep existing file if not uploaded again
-            if ($_FILES['bukti']['name']) {
-                $folder = "./uploads/";
-                $bukti = time() . '_' . basename($_FILES['bukti']['name']);
-                $tmp_bukti = $_FILES['bukti']['tmp_name'];
-                move_uploaded_file($tmp_bukti, $folder . $bukti);
+            function uploadFile($file, $targetDir, $defaultFile) {
+                if (!empty($file['name'])) {
+                    $fileName = time() . '_' . basename($file['name']);
+                    $targetFilePath = $targetDir . $fileName;
+                    move_uploaded_file($file['tmp_name'], $targetFilePath);
+                    return $targetFilePath;
+                }
+                return $defaultFile;
             }
+            $uploadDir = "uploads/";
+            $bukti = uploadFile($_FILES['bukti'], $uploadDir, $data['bukti']);
+    
 
             // Update data with prepared statement
             $stmt = $conn->prepare("UPDATE kendaraan SET 
                 pemakai=?, no_telepon=?, tipe=?, no_plat=?, 
                 kondisi=?, tanggal_pemeliharaan=?, 
-                biaya_pemeliharaan=?, status_pemeliharaan=?, keterangan=?, bukti=? 
+                biaya_pemeliharaan=?, status_pemeliharaan=?, keterangan=?
                 WHERE id=?");
 
             $stmt->bind_param(
-                'ssssssssssi',
+                'sssssssssi',
                 $nama_pemelihara,
                 $no_telepon,
                 $jenis_kendaraan,
@@ -69,7 +74,6 @@ try {
                 $biaya_pemeliharaan,
                 $status_pemeliharaan,
                 $keterangan,
-                $bukti,
                 $id
             );
 
@@ -184,7 +188,7 @@ try {
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nama_pemelihara">Nama Pemelihara</label>
+                            <label for="nama_pemelihara">Nama Pengguna</label>
                             <input type="text" class="form-control" id="nama_pemelihara" name="nama_pemelihara" value="<?= $data['pemakai'] ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">

@@ -111,7 +111,6 @@ if (isset($_GET['id'])) {
                                     <tr>
                                         <td class="text-center dot-column"  style=" border: none;">
                                         <div>•</div> <!-- Titik -->
-                                        <div class="line"></div> <!-- Garis di bawah titik -->
                                         </td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['tanggal']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['created_at']) ?></td>
@@ -119,7 +118,16 @@ if (isset($_GET['id'])) {
                                         <td  style=" border: none;"><?= htmlspecialchars($row['keterangan']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['pengguna']) ?></td>
                                         <td  style=" border: none;"><?= htmlspecialchars($row['biaya']) ?></td>
-                                        <td  style=" border: none;"><?= htmlspecialchars($row['bukti']) ?></td>
+                                        <td>                              
+                                            <?php if (!empty($data['bukti_pembayaran'])): ?>
+                                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#paymentProofModal" 
+                                                            onclick="showImage('<?= htmlspecialchars($row['bukti_pembayaran']) ?>')">
+                                                        <i class="bi bi-file-earmark-text"></i> 
+                                                    </button>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Tidak ada Foto BPKB</span>
+                                                <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else: ?>
